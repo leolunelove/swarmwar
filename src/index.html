@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#071218">
+<title>SWARMWAR</title>
+<style>/* @STYLE */</style>
+</head>
+<body>
+<main id="game">
+  <canvas id="canvas" aria-hidden="true"></canvas>
+  <div id="hurt" class="hurt" aria-hidden="true"></div>
+
+  <div class="utility">
+    <button type="button" id="sound" class="icon-button" data-t="soundOn"></button>
+    <button type="button" id="fullscreen" class="icon-button" data-t="fullscreen"></button>
+    <button type="button" id="pause" class="icon-button" data-t="pause" hidden></button>
+  </div>
+
+  <section id="flight" class="flight" aria-label="Flight instruments" hidden>
+    <div class="mission">
+      <div class="micro"><span id="operation"></span><span class="separator"></span><time id="clock">00:00</time></div>
+      <strong id="sectorName"></strong>
+      <div class="wave"><span id="wavePips"><i></i><i></i><i></i><i></i><i></i></span><span id="objective"></span></div>
+      <div class="wave-track" id="waveTrack" aria-hidden="true"><i id="waveFill"></i></div>
+    </div>
+    <div class="boss hud-panel" id="boss" hidden>
+      <div><span id="bossName"></span><span id="bossPhase"></span></div>
+      <div class="meter"><i id="bossFill"></i></div>
+    </div>
+    <div id="tactical" class="tactical hud-panel" role="status" hidden>
+      <span id="tacticalLabel" class="micro"></span>
+      <strong id="tacticalOrder"></strong><span id="tacticalReason"></span>
+    </div>
+    <div class="announcement" id="announcement" hidden>
+      <div id="announceLabel" class="micro"></div><strong id="announceTitle"></strong><span id="announceBody"></span>
+    </div>
+    <div id="hint" class="hint hud-panel" role="status" hidden></div>
+
+    <div class="readout">
+        <div class="hull"><div><span data-t="hull"></span><strong id="hullNumber"></strong></div><div class="meter"><i id="hullFill"></i></div></div>
+        <div class="count"><span data-t="drones"></span><strong id="droneCount">001</strong><small id="fabrication"></small></div>
+        <div class="count score"><span data-t="score"></span><strong id="score">000000</strong><i class="chain" id="chain" hidden></i></div>
+        <div id="support" class="support" hidden></div>
+    </div>
+    <section class="dock">
+      <div id="formations" class="formations" aria-label="Formation commands"></div>
+    </section>
+  </section>
+
+  <section id="menu" class="screen menu" aria-labelledby="gameTitle">
+    <div class="menu-inner">
+      <div class="menu-tag micro"><span aria-hidden="true">◈</span><span data-t="menuTag"></span></div>
+      <div class="menu-title">
+        <h1 id="gameTitle" data-t="title"></h1>
+        <p data-t="tagline"></p>
+      </div>
+      <p class="menu-brief" data-t="brief"></p>
+      <div class="protocol" aria-labelledby="protocolLabel"><span id="protocolLabel" class="micro" data-t="protocol"></span><div id="protocols" class="segmented"></div><p id="protocolNote"></p></div>
+      <div class="menu-main">
+        <button type="button" id="campaign" class="button primary" data-t="campaignAction"></button>
+        <button type="button" id="endless" class="button" data-t="endlessAction"></button>
+        <button type="button" id="rush" class="button" data-t="rushAction" hidden></button>
+        <button type="button" id="continueRun" class="button checkpoint" hidden></button>
+      </div>
+      <div class="menu-links">
+        <button type="button" id="training" class="text-button" data-t="trainingAction"></button>
+        <button type="button" id="manual" class="text-button" data-t="manual"></button>
+        <button type="button" id="settings" class="text-button" data-t="settings"></button>
+        <button type="button" id="records" class="text-button" data-t="records"></button>
+        <button type="button" id="changelog" class="text-button" data-t="changelog"></button>
+      </div>
+      <p class="menu-status" id="menuStatus"></p>
+      <p class="quick-controls" id="quickControls"></p>
+      <p class="menu-status saved-status" id="savedStatus" hidden></p>
+    </div>
+    <aside class="campaign-teaser"><span class="micro" data-t="campaignRoute"></span><h2 data-t="routeTitle"></h2><p data-t="routeTeaser"></p><div id="menuRoute" class="mini-route"></div><button id="viewMap" class="text-button" type="button" data-t="viewMap"></button></aside>
+    <div class="menu-credit micro"><span data-t="menuCredit"></span><span data-t="menuBuild"></span></div>
+  </section>
+
+  <section id="mapMenu" class="screen map-screen" aria-labelledby="mapTitle" hidden>
+    <header class="map-header"><div><span class="micro" data-t="campaignRoute"></span><h2 id="mapTitle" data-t="routeTitle"></h2></div><button id="mapBack" class="button" type="button" data-t="back"></button></header>
+    <div class="map-layout"><div class="route-chart"><svg viewBox="0 0 600 460" aria-hidden="true"><path d="M80 350 L185 150 L300 285 L405 95 L525 215"/></svg><div id="mapNodes"></div><div class="map-legend" data-t="routeLegend"></div></div>
+      <article class="chapter-intel"><span id="chapterIndex" class="micro"></span><h3 id="chapterTitle"></h3><p id="chapterBrief"></p><div id="chapterRules" class="chapter-rules"></div><ol id="chapterPhases" class="chapter-phases"></ol><p id="mapStatus" role="status"></p><div class="actions"><button id="mapDeploy" class="button primary" type="button"></button><button id="mapPractice" class="button" type="button" data-t="practiceChapter"></button></div></article></div>
+  </section>
+  <section id="changelogMenu" class="screen modal" aria-labelledby="changelogTitle" hidden><div class="sheet wide"><span class="micro kicker" data-t="releaseChannel"></span><h2 id="changelogTitle" data-t="changelog"></h2><div id="releaseList" class="release-list"></div><button id="changelogBack" class="button primary" type="button" data-t="back"></button></div></section>
+
+  <section id="pauseMenu" class="screen modal" aria-labelledby="pauseTitle" hidden>
+    <div class="sheet compact">
+      <span class="micro kicker" data-t="pauseTag"></span>
+      <h2 id="pauseTitle" data-t="pauseTitle"></h2>
+      <p id="pauseInfo"></p>
+      <div class="actions">
+        <button type="button" id="resume" class="button primary" data-t="resume"></button>
+        <button type="button" id="pauseSettings" class="button" data-t="settings"></button>
+        <button type="button" id="pauseManual" class="text-button" data-t="manual"></button>
+        <button type="button" id="retire" class="text-button" data-t="retire"></button>
+      </div>
+      <p class="control-help" id="pauseControls"></p>
+    </div>
+  </section>
+
+  <section id="options" class="screen modal" aria-labelledby="optionsTitle" hidden>
+    <div class="sheet compact">
+      <span class="micro kicker" data-t="optionsTag"></span>
+      <h2 id="optionsTitle" data-t="settings"></h2>
+      <div id="settingList" class="setting-list"></div>
+      <p class="control-help" id="optionsControls"></p>
+      <div class="actions">
+        <button type="button" id="optionsBack" class="button primary" data-t="back"></button>
+        <button type="button" id="editKeys" class="button" data-t="keyBindings"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="bindingsMenu" class="screen modal" aria-labelledby="bindingsTitle" hidden>
+    <div class="sheet compact">
+      <span class="micro kicker" data-t="inputTag"></span>
+      <h2 id="bindingsTitle" data-t="keyBindings"></h2>
+      <p class="key-help" data-t="keyHelp"></p>
+      <div id="bindingList" class="binding-list"></div>
+      <div id="bindingStatus" class="binding-status" role="status"></div>
+      <div class="actions">
+        <button type="button" id="bindingsBack" class="button primary" data-t="back"></button>
+        <button type="button" id="restoreKeys" class="button" data-t="restoreKeys"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="manualMenu" class="screen modal" aria-labelledby="manualTitle" hidden>
+    <div class="sheet wide">
+      <span class="micro kicker" data-t="manualTag"></span>
+      <h2 id="manualTitle" data-t="manual"></h2>
+      <div class="segmented manual-tabs" id="manualTabs"></div>
+      <div class="manual-list" id="manualList"></div>
+      <button type="button" id="manualBack" class="button primary" data-t="back"></button>
+    </div>
+  </section>
+
+  <section id="recordsMenu" class="screen modal" aria-labelledby="recordsTitle" hidden>
+    <div class="sheet">
+      <span class="micro kicker" data-t="recordsTag"></span>
+      <h2 id="recordsTitle" data-t="records"></h2>
+      <div id="recordList" class="record-list"></div>
+      <p class="rush-record" id="rushRecord" hidden></p>
+      <h3 class="badges-title" data-t="badges"></h3>
+      <div id="badgeList" class="badge-list"></div>
+      <button type="button" id="recordsBack" class="button primary" data-t="back"></button>
+    </div>
+  </section>
+
+  <section id="draft" class="screen modal" aria-labelledby="draftTitle" hidden>
+    <div class="sheet wide">
+      <span id="draftKicker" class="micro kicker"></span>
+      <h2 id="draftTitle" tabindex="-1" data-t="draftTitle"></h2>
+      <p id="draftNext"></p>
+      <p class="build-summary micro" id="buildSummary"></p>
+      <div class="upgrade-list" id="upgradeList"></div>
+      <button type="button" id="rerollDraft" class="button"></button>
+      <button type="button" id="draftBack" class="text-button" data-t="retire"></button>
+    </div>
+  </section>
+
+  <section id="debrief" class="screen modal" aria-labelledby="debriefTitle" hidden>
+    <div class="sheet">
+      <span id="debriefKicker" class="micro kicker"></span>
+      <h2 id="debriefTitle"></h2>
+      <p id="debriefText"></p><p id="deathCause" class="death-cause" hidden></p>
+      <p class="debrief-note" id="debriefNote" hidden></p>
+      <div class="result" id="result"></div>
+      <p class="build-summary" id="resultBuild" hidden></p>
+      <p class="earned" id="earned" hidden></p>
+      <div class="actions">
+        <button type="button" id="retry" class="button primary"></button>
+        <button type="button" id="return" class="button" data-t="return"></button>
+      </div>
+    </div>
+  </section>
+</main>
+<script>/* @STRINGS */</script>
+<script>/* @CONTENT */</script>
+<script>/* @SIM */</script>
+<script>/* @RENDER */</script>
+<script>/* @AUDIO */</script>
+<script>/* @BINDINGS */</script>
+<script>/* @CLIENT */</script>
+</body>
+</html>
