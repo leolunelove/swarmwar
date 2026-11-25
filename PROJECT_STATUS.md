@@ -1,3 +1,9 @@
+# Current continuation — 25 November 2026
+
+Clarity patch v0.1.2.6: wall corridor tint/direction marks; offscreen beam/ring countdowns; banner/dock occlusion fixes; viewport-safe weapon annotation; visible boss state and unblocked frozen boss meter. No sim.js or content.js changes. Full checks pass. Local real-browser smoke passed, including dock opacity 0.12 and elementFromPoint returning the canvas over the core; no console warnings/errors.
+
+Current user task is STILL ACTIVE: finish a full Standard campaign in a real browser, all five chapters, zero checkpoint retries, then publish any confirmed fixes. The fresh live v0.1.2.5 attempt cleared Array and Belt, and Veil waves 1–3; control timed out at Memory Lock and the run died at 09:35. It is not a completed campaign. Do not resume its checkpoint and claim continuity. Keep the exact failed record in PLAYTEST.md. Next: publish the verified clarity patch and start a fresh campaign from chapter one, using try/finally to pause immediately around every input batch.
+
 # SWARMWAR handoff
 
 Published release: **v0.1.2.5 / First preview release**. Start here instead of rereading the chat. This packages the former 2.1 development build under the requested four-part preview version. Source commit `36ad112` and Pages deployment `45690301325` are verified. Live HTML and the release ZIP match the tested local artifacts; see RELEASE_HANDOFF.md.

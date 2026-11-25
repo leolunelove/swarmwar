@@ -1,3 +1,13 @@
+# SWARMWAR v0.1.2.6 — Clearer combat lanes
+
+The live game gains stronger wall-corridor markings, offscreen beam/ring countdowns, announcements that fade over targets, a dock that yields to the core and mouse shots, and weapon feedback that stays inside the viewport. Boss state and health remain readable during frozen inspection. Combat simulation, encounter content and upgrade values are unchanged.
+
+Full automated checks passed, including the packaged twenty-wave/five-guardian campaign and presentation regressions. A real-browser preview verified corridor tint, manual firing/switching, pause, bottom-edge labels and dock pointer passthrough, with no captured console errors. The current full manual Standard attempt is still pending; the previous v0.1.2.5 attempt ended after a browser-control timeout in chapter three. See PLAYTEST.md for exact evidence and limits.
+
+The original v0.1.2.5 tagged download below remains unchanged. The repository and live Pages build carry v0.1.2.6.
+
+---
+
 # SWARMWAR v0.1.2.5 — First preview release
 
 [Play in your browser](https://leolunelove.github.io/swarmwar/)

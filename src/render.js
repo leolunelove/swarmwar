@@ -192,8 +192,22 @@ const FlightRender=(()=>{
         }
         if(h.type==='sweep'){
           c.save();const pos=Swarm.hazardPosition(h,g.t),vertical=h.axis==='x',edge=vertical?g.h:g.w;
-          c.strokeStyle='#9ef6e62e';c.lineWidth=1;c.setLineDash([5,9]);
+          // The corridor remains visible before the wall itself enters the camera.
+          c.fillStyle='#a7ffe60c';
+          if(vertical)c.fillRect(0,h.gap-h.gapHalf,g.w,h.gapHalf*2);
+          else c.fillRect(h.gap-h.gapHalf,0,h.gapHalf*2,g.h);
+          c.strokeStyle='#9ef6e664';c.lineWidth=1;c.setLineDash([5,9]);
           for(const side of [-1,1]){const cross=h.gap+side*h.gapHalf;if(vertical)line(c,0,cross,g.w,cross);else line(c,cross,0,cross,g.h);}
+          const v=camera(g),low=vertical?v.y:v.x,high=low+(vertical?v.h:v.w),outside=h.gap<low||h.gap>high;
+          if(outside){
+            const cross=Math.max(low+16,Math.min(high-16,h.gap)),direction=h.gap<low?-1:1;
+            c.setLineDash([]);c.strokeStyle='#a7ffe6';c.lineWidth=1.8;
+            for(const part of [.2,.5,.8]){
+              const along=vertical?v.x+v.w*part:v.y+v.h*part;
+              if(vertical){line(c,along-4,cross-direction*4,along,cross+direction*2);line(c,along,cross+direction*2,along+4,cross-direction*4);}
+              else{line(c,cross-direction*4,along-4,cross+direction*2,along);line(c,cross+direction*2,along,cross-direction*4,along+4);}
+            }
+          }
           c.setLineDash([]);c.strokeStyle=ready?'#ffd0acb0':'#ff87a97d';c.lineWidth=ready?2:h.width;
           const stroke=(start,end)=>vertical?line(c,pos.x,start,pos.x,end):line(c,start,pos.y,end,pos.y);
           stroke(0,h.gap-h.gapHalf);stroke(h.gap+h.gapHalf,edge);
@@ -446,15 +460,15 @@ const FlightRender=(()=>{
     }
     function annotations(g,{guide,aim,touch,keyLabel,weaponLabel,hullLabel}){
       if(weaponLabel&&!g.bossDefeated){
-        const p=g.player,v=camera(g),x=Math.max(v.x+62,Math.min(v.x+v.w-62,p.x));c.font='600 8px ui-monospace,monospace';c.textAlign='center';c.textBaseline='middle';
-        c.fillStyle='#071218db';c.fillRect(x-59,p.y+29,118,13);c.fillStyle=g.mode==='spear'?'#b7e8ff':g.mode==='blades'?'#d5efad':'#a7e7dc';c.fillText(weaponLabel,x,p.y+36);
+        const p=g.player,v=camera(g),x=Math.max(v.x+62,Math.min(v.x+v.w-62,p.x)),y=p.y+43>v.y+v.h-10?p.y-22:p.y+36;c.font='600 8px ui-monospace,monospace';c.textAlign='center';c.textBaseline='middle';
+        c.fillStyle='#071218db';c.fillRect(x-59,y-7,118,13);c.fillStyle=g.mode==='spear'?'#b7e8ff':g.mode==='blades'?'#d5efad':'#a7e7dc';c.fillText(weaponLabel,x,y);
       }
       if(g.player.hp/g.player.max<=.3){const p=g.player,v=camera(g),x=Math.max(v.x+30,Math.min(v.x+v.w-30,p.x));c.strokeStyle='#ffac91';c.lineWidth=2.5;c.setLineDash([4,5]);ring(c,p.x,p.y,18);c.setLineDash([]);c.fillStyle='#ffc0a3';c.font='700 9px ui-monospace,monospace';c.textAlign='center';c.fillText(hullLabel+' '+Math.ceil(p.hp),x,p.y+55);}
       if(guide){
         const o=guide.target||guide.shot;
         if(guide.mode!==g.mode){
           const key=guide.mode?(keyLabel?.(guide.mode,true)||String(Swarm.modes.indexOf(guide.mode)+1)):'!';
-          const p=g.player,b=Math.max(9,key.length*4+3),x=Math.max(b+3,Math.min(g.w-b-3,p.x)),y=Math.max(15,Math.min(g.h-15,p.y-39));
+          const p=g.player,v=camera(g),b=Math.max(9,key.length*4+3),x=Math.max(v.x+b+3,Math.min(v.x+v.w-b-3,p.x)),y=p.y-49<v.y+10?p.y+61:p.y-39;
           c.fillStyle='#0a1724f2';c.fillRect(x-b,y-10,b*2,16);
           c.strokeStyle=guide.mode?'#ffdc90':'#ff9b90';c.lineWidth=1;
           path(c,[[x-b,y-10],[x+b,y-10],[x+b,y+6],[x-b,y+6]]);c.stroke();
@@ -482,7 +496,7 @@ const FlightRender=(()=>{
         line(c,touch.from.x,touch.from.y,x,y);ring(c,x,y,8);
       }
     }
-    function edgeContacts(g,view){
+    function edgeContacts(g,view,state){
       const inset=11,center={x:view.x+view.w/2,y:view.y+view.h/2};
       const off=g.enemies.filter(e=>e.hp>0&&(e.boss||Math.hypot(e.x-g.player.x,e.y-g.player.y)<255)&&
         (e.x<view.x||e.x>view.x+view.w||e.y<view.y||e.y>view.y+view.h));
@@ -491,6 +505,17 @@ const FlightRender=(()=>{
         const x=center.x+dx*ratio,y=center.y+dy*ratio,a=Math.atan2(dy,dx);
         c.save();c.translate(x,y);c.rotate(a);c.fillStyle=e.boss?'#ffd399':'#ff9b87ac';
         path(c,[[4,0],[-4,-3],[-4,3]]);c.fill();c.restore();
+      }
+      // Telegraph origins can sit beyond the camera while their patterns cross
+      // the arena. Keep the deadline readable without requiring the adviser.
+      const outside=h=>h.x<view.x||h.x>view.x+view.w||h.y<view.y||h.y>view.y+view.h;
+      for(const h of g.hazards.filter(h=>['ray','wave'].includes(h.type)&&h.fire>g.t&&outside(h)).slice(0,4)){
+        const dx=h.x-center.x,dy=h.y-center.y,ratio=Math.min((view.w/2-28)/Math.max(.01,Math.abs(dx)),(view.h/2-54)/Math.max(.01,Math.abs(dy)));
+        const x=center.x+dx*ratio,y=center.y+dy*ratio,a=Math.atan2(dy,dx),label=h.type==='ray'?state.edgeBeamLabel:state.edgeRingLabel;
+        if(!label)continue;
+        c.save();c.translate(x,y);c.rotate(a);c.fillStyle='#ffb69b';path(c,[[6,0],[-4,-4],[-4,4]]);c.fill();c.restore();
+        const text=label+' '+Math.max(0,h.fire-g.t).toFixed(1)+'s',tx=Math.max(view.x+32,Math.min(view.x+view.w-32,x));
+        c.fillStyle='#101a26eb';c.fillRect(tx-31,y+7,62,13);c.fillStyle='#ffd0b7';c.font='700 8px ui-monospace,monospace';c.textAlign='center';c.textBaseline='middle';c.fillText(text,tx,y+14);
       }
     }
     function draw(g,state){
@@ -526,7 +551,7 @@ const FlightRender=(()=>{
         if(f.type==='gravity')ring(c,f.x,f.y,f.radius*(.35+Swarm.beatPhase(g)*.5));c.restore();
       }
       hazards(g,state.reduced);projectiles(g);enemies(g,state.reduced);swarm(g,state);effects(g,state.reduced);
-      if(!state.frozen||state.inspect){annotations(g,state);edgeContacts(g,view);}
+      if(!state.frozen||state.inspect){annotations(g,state);edgeContacts(g,view,state);}
       c.restore();
     }
     return {draw};

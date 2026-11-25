@@ -1,8 +1,8 @@
-# SWARMWAR v0.1.2.5 — The Signal War
+# SWARMWAR v0.1.2.6 — The Signal War
 
 A fullscreen vector action game about turning one drone into a coordinated swarm. **Every weapon uses manual aim and trigger input.** Move, collect wreckage, reshape the swarm, and choose a build across five chapters.
 
-**First public preview release.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
+**Preview clarity patch.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
 
 ![SWARMWAR flight terminal](release-qa-v0.1.2.5/menu.jpg)
 

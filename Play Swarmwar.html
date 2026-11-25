@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#071218">
-<meta name="application-version" content="0.1.2.5">
+<meta name="application-version" content="0.1.2.6">
 <title>SWARMWAR</title>
 <style>:root{
   color-scheme:dark;--bg:#071218;--paper:#e8f6f2;--muted:#9db5ba;--faint:#65858a;--edge:#79b7bb38;--cyan:#92f8eb;--gold:#ffd487;--salmon:#ff867f;
@@ -356,6 +356,15 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
 .inspect-bar{position:absolute;z-index:9;top:var(--top);left:50%;translate:-50% 0;display:flex;gap:9px;align-items:center;width:max-content;max-width:94vw;padding:5px 10px;border:1px solid var(--glass-edge);border-radius:99px;background:#0c1d27e8;color:#b6d9d4;font:11px var(--mono)}.inspect-bar .text-button{font-size:11px;padding:5px 9px}.inspect-bar span{font-size:10px}#game[data-inspect="true"] .utility{opacity:.25}#game[data-inspect="true"] #flight .formations{pointer-events:none;opacity:.7}
 @media(max-width:580px){.inspect-bar{gap:3px}.inspect-bar span{font-size:8px}.inspect-bar .text-button{font-size:9px}}
+
+/* Keep the core and targets above transient interface decoration. */
+#game[data-page="playing"][data-announcement="clear"] .announcement{opacity:.1!important}
+@media(pointer:fine){
+  #game[data-page="playing"][data-dock="clear"] .dock{opacity:.12}
+  #game[data-page="playing"][data-dock="clear"] .formation{pointer-events:none}
+}
+.flight .boss #bossPhase{display:block;font-size:8px}
+.inspect-bar{top:calc(var(--top) + 40px)}
 </style>
 </head>
 <body>
@@ -564,7 +573,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   legacyRun:'LEGACY RUN · NO CAMPAIGN RECORD',controlsDesktop:'{move} or arrows move · Mouse aims · Hold left click for Ring/Blades; Spear builds automatically, click/release to fire · {forms} select · {burst} Kamikaze · P pauses/resumes; H inspects while paused. Touch and gamepad controls are in Settings.',controlsTouch:'Drag left to move; drag right to aim and fire. Lift the right finger to release Spear. Tap the formation dock to switch or launch Kamikaze.',controlsPad:'Left stick moves · Right stick aims · RT holds fire; release RT for Spear · Bumpers switch · A launches Kamikaze · Start pauses.',
   inspectField:'VIEW FIELD',inspectHint:'PAUSED · H returns · P resumes',
   title:'SWARMWAR',tagline:'ONE DRONE. MANY FORMS.',
-  menuTag:'SWARM OPERATIONS / FLIGHT TERMINAL',menuCredit:'SECTOR NETWORK / LOCAL CONTROL',menuBuild:'CAMPAIGN EDITION / v0.1.2.5',
+  menuTag:'SWARM OPERATIONS / FLIGHT TERMINAL',menuCredit:'SECTOR NETWORK / LOCAL CONTROL',menuBuild:'CAMPAIGN EDITION / v0.1.2.6',
   quickControls:'{move} MOVE · LEFT CLICK FIRE · {forms} FORMATIONS',
   brief:'A lone signal against a machine empire. Recover the fallen. Build your swarm. Aim every shot.',
   campaignAction:'CAMPAIGN MAP',endlessAction:'ENDLESS RUN',rushAction:'BOSS RUSH',trainingAction:'TRAINING',trainingPassed:'TRAINING ✓',continueRun:'CONTINUE {kind}',savedStatus:'CHECKPOINT / {protocol} · SECTOR {n}',saveExit:'SAVE & EXIT',settings:'SETTINGS',manual:'FIELD MANUAL',records:'FLIGHT RECORDS',
@@ -574,7 +583,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   overclockNote:'More armor, faster attacks, and less room for mistakes.',
   recordLine:'{protocol} CAMPAIGN BEST / {score}',noRecord:'5 CHAPTERS  /  20 WAVES  /  5 GUARDIANS',
   fullscreen:'FULLSCREEN',exitFullscreen:'EXIT FULLSCREEN',fullUnavailable:'Fullscreen unavailable here. The arena still fills the window.',
-  soundOn:'SOUND ON',soundOff:'SOUND OFF',pause:'PAUSE',resume:'RESUME RUN',retire:'ABORT RUN',back:'BACK',return:'MAIN MENU',
+  edgeBeam:'BEAM',edgeRing:'RING',soundOn:'SOUND ON',soundOff:'SOUND OFF',pause:'PAUSE',resume:'RESUME RUN',retire:'ABORT RUN',back:'BACK',return:'MAIN MENU',
   optionsTag:'FLIGHT TERMINAL / CONFIGURATION',manualTag:'FLIGHT TERMINAL / COMBAT INTEL',recordsTag:'FLIGHT TERMINAL / LOCAL LOG',pauseTag:'FLIGHT CONTROL / SIGNAL HELD',
   pauseTitle:'Run paused',pauseInfo:'{sector} · {objective} · {time}',pauseSaved:'You can resume from the latest wave checkpoint.',
   controls:'{move} or arrows move · Mouse aims · hold left click to fire; rail builds automatically, click/release to launch · {forms} switch · Q/E cycle · {burst} bursts · F fullscreen · Esc pauses. Touch: drag left to move and right to aim and fire. Gamepad: sticks move and aim, RT fires, bumpers cycle, A bursts, Start pauses.',
@@ -730,6 +739,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 };
 
 const releaseNotes=[
+ {version:'0.1.2.6',date:'25 NOV 2026',title:'Clearer combat lanes',items:['Moving-wall corridors have a mint tint, stronger boundaries and direction marks when the opening is outside the camera.','Offscreen beam and broken-ring sources show their release countdown at the arena edge, independently of formation advice.','Encounter announcements fade when a player or enemy sits beneath them. The formation dock fades over the core and lets mouse shots pass through while keyboard shortcuts remain available.','Guardian health now shows its exposed, shielded or enraged state. Frozen inspection leaves the boss meter visible.','Enemy damage, attack timing, weapon values, upgrade values and difficulty rules are unchanged.']},
  {version:'0.1.2.5',date:'25 NOV 2026',title:'First preview release',items:['Five chapters, twenty waves, five guardians and nineteen upgrade choices. Explore the campaign map or practice a chapter.','Spear builds its rail automatically while equipped. Aim and click/release to launch it; charge never fires by itself.','Stored rail charge survives formation changes, pause and pointer cancellation. Quick clicks are registered between frames.','Ring always fires a straight 28-damage center shot, with weaker extra fan bolts. Defeat advice respects locked formations.','A short draft input guard prevents carried combat clicks from selecting modules or aborting.','P toggles pause without leaving fullscreen. View Field retains weapon and threat markers while frozen.','Changing the play area pauses combat and clears held input. Space remains the payload key even if a combat button has focus.','Guardian arrivals show one phase label and clear advice left over from the previous wave.']},
  {version:'2.0',date:'23 NOV 2026',title:'The Signal War',items:[
  'Five playable chapters, each with four waves and a guardian. The Veil adds corridor signals; Cinder Forge adds paired heat vents.',
@@ -2024,8 +2034,22 @@ const releaseNotes=[
         }
         if(h.type==='sweep'){
           c.save();const pos=Swarm.hazardPosition(h,g.t),vertical=h.axis==='x',edge=vertical?g.h:g.w;
-          c.strokeStyle='#9ef6e62e';c.lineWidth=1;c.setLineDash([5,9]);
+          // The corridor remains visible before the wall itself enters the camera.
+          c.fillStyle='#a7ffe60c';
+          if(vertical)c.fillRect(0,h.gap-h.gapHalf,g.w,h.gapHalf*2);
+          else c.fillRect(h.gap-h.gapHalf,0,h.gapHalf*2,g.h);
+          c.strokeStyle='#9ef6e664';c.lineWidth=1;c.setLineDash([5,9]);
           for(const side of [-1,1]){const cross=h.gap+side*h.gapHalf;if(vertical)line(c,0,cross,g.w,cross);else line(c,cross,0,cross,g.h);}
+          const v=camera(g),low=vertical?v.y:v.x,high=low+(vertical?v.h:v.w),outside=h.gap<low||h.gap>high;
+          if(outside){
+            const cross=Math.max(low+16,Math.min(high-16,h.gap)),direction=h.gap<low?-1:1;
+            c.setLineDash([]);c.strokeStyle='#a7ffe6';c.lineWidth=1.8;
+            for(const part of [.2,.5,.8]){
+              const along=vertical?v.x+v.w*part:v.y+v.h*part;
+              if(vertical){line(c,along-4,cross-direction*4,along,cross+direction*2);line(c,along,cross+direction*2,along+4,cross-direction*4);}
+              else{line(c,cross-direction*4,along-4,cross+direction*2,along);line(c,cross+direction*2,along,cross-direction*4,along+4);}
+            }
+          }
           c.setLineDash([]);c.strokeStyle=ready?'#ffd0acb0':'#ff87a97d';c.lineWidth=ready?2:h.width;
           const stroke=(start,end)=>vertical?line(c,pos.x,start,pos.x,end):line(c,start,pos.y,end,pos.y);
           stroke(0,h.gap-h.gapHalf);stroke(h.gap+h.gapHalf,edge);
@@ -2278,15 +2302,15 @@ const releaseNotes=[
     }
     function annotations(g,{guide,aim,touch,keyLabel,weaponLabel,hullLabel}){
       if(weaponLabel&&!g.bossDefeated){
-        const p=g.player,v=camera(g),x=Math.max(v.x+62,Math.min(v.x+v.w-62,p.x));c.font='600 8px ui-monospace,monospace';c.textAlign='center';c.textBaseline='middle';
-        c.fillStyle='#071218db';c.fillRect(x-59,p.y+29,118,13);c.fillStyle=g.mode==='spear'?'#b7e8ff':g.mode==='blades'?'#d5efad':'#a7e7dc';c.fillText(weaponLabel,x,p.y+36);
+        const p=g.player,v=camera(g),x=Math.max(v.x+62,Math.min(v.x+v.w-62,p.x)),y=p.y+43>v.y+v.h-10?p.y-22:p.y+36;c.font='600 8px ui-monospace,monospace';c.textAlign='center';c.textBaseline='middle';
+        c.fillStyle='#071218db';c.fillRect(x-59,y-7,118,13);c.fillStyle=g.mode==='spear'?'#b7e8ff':g.mode==='blades'?'#d5efad':'#a7e7dc';c.fillText(weaponLabel,x,y);
       }
       if(g.player.hp/g.player.max<=.3){const p=g.player,v=camera(g),x=Math.max(v.x+30,Math.min(v.x+v.w-30,p.x));c.strokeStyle='#ffac91';c.lineWidth=2.5;c.setLineDash([4,5]);ring(c,p.x,p.y,18);c.setLineDash([]);c.fillStyle='#ffc0a3';c.font='700 9px ui-monospace,monospace';c.textAlign='center';c.fillText(hullLabel+' '+Math.ceil(p.hp),x,p.y+55);}
       if(guide){
         const o=guide.target||guide.shot;
         if(guide.mode!==g.mode){
           const key=guide.mode?(keyLabel?.(guide.mode,true)||String(Swarm.modes.indexOf(guide.mode)+1)):'!';
-          const p=g.player,b=Math.max(9,key.length*4+3),x=Math.max(b+3,Math.min(g.w-b-3,p.x)),y=Math.max(15,Math.min(g.h-15,p.y-39));
+          const p=g.player,v=camera(g),b=Math.max(9,key.length*4+3),x=Math.max(v.x+b+3,Math.min(v.x+v.w-b-3,p.x)),y=p.y-49<v.y+10?p.y+61:p.y-39;
           c.fillStyle='#0a1724f2';c.fillRect(x-b,y-10,b*2,16);
           c.strokeStyle=guide.mode?'#ffdc90':'#ff9b90';c.lineWidth=1;
           path(c,[[x-b,y-10],[x+b,y-10],[x+b,y+6],[x-b,y+6]]);c.stroke();
@@ -2314,7 +2338,7 @@ const releaseNotes=[
         line(c,touch.from.x,touch.from.y,x,y);ring(c,x,y,8);
       }
     }
-    function edgeContacts(g,view){
+    function edgeContacts(g,view,state){
       const inset=11,center={x:view.x+view.w/2,y:view.y+view.h/2};
       const off=g.enemies.filter(e=>e.hp>0&&(e.boss||Math.hypot(e.x-g.player.x,e.y-g.player.y)<255)&&
         (e.x<view.x||e.x>view.x+view.w||e.y<view.y||e.y>view.y+view.h));
@@ -2323,6 +2347,17 @@ const releaseNotes=[
         const x=center.x+dx*ratio,y=center.y+dy*ratio,a=Math.atan2(dy,dx);
         c.save();c.translate(x,y);c.rotate(a);c.fillStyle=e.boss?'#ffd399':'#ff9b87ac';
         path(c,[[4,0],[-4,-3],[-4,3]]);c.fill();c.restore();
+      }
+      // Telegraph origins can sit beyond the camera while their patterns cross
+      // the arena. Keep the deadline readable without requiring the adviser.
+      const outside=h=>h.x<view.x||h.x>view.x+view.w||h.y<view.y||h.y>view.y+view.h;
+      for(const h of g.hazards.filter(h=>['ray','wave'].includes(h.type)&&h.fire>g.t&&outside(h)).slice(0,4)){
+        const dx=h.x-center.x,dy=h.y-center.y,ratio=Math.min((view.w/2-28)/Math.max(.01,Math.abs(dx)),(view.h/2-54)/Math.max(.01,Math.abs(dy)));
+        const x=center.x+dx*ratio,y=center.y+dy*ratio,a=Math.atan2(dy,dx),label=h.type==='ray'?state.edgeBeamLabel:state.edgeRingLabel;
+        if(!label)continue;
+        c.save();c.translate(x,y);c.rotate(a);c.fillStyle='#ffb69b';path(c,[[6,0],[-4,-4],[-4,4]]);c.fill();c.restore();
+        const text=label+' '+Math.max(0,h.fire-g.t).toFixed(1)+'s',tx=Math.max(view.x+32,Math.min(view.x+view.w-32,x));
+        c.fillStyle='#101a26eb';c.fillRect(tx-31,y+7,62,13);c.fillStyle='#ffd0b7';c.font='700 8px ui-monospace,monospace';c.textAlign='center';c.textBaseline='middle';c.fillText(text,tx,y+14);
       }
     }
     function draw(g,state){
@@ -2358,7 +2393,7 @@ const releaseNotes=[
         if(f.type==='gravity')ring(c,f.x,f.y,f.radius*(.35+Swarm.beatPhase(g)*.5));c.restore();
       }
       hazards(g,state.reduced);projectiles(g);enemies(g,state.reduced);swarm(g,state);effects(g,state.reduced);
-      if(!state.frozen||state.inspect){annotations(g,state);edgeContacts(g,view);}
+      if(!state.frozen||state.inspect){annotations(g,state);edgeContacts(g,view,state);}
       c.restore();
     }
     return {draw};
@@ -3080,6 +3115,10 @@ const releaseNotes=[
   }
   function hud(){
     const p=g.player,boss=g.enemies.find(e=>e.boss),view=FlightRender.camera(g);root.dataset.hud=(p.x-view.x)/view.w<.4&&(p.y-view.y)/view.h<.17?'clear':'normal';root.dataset.utility=(p.x-view.x)/view.w>.8&&(p.y-view.y)/view.h<.17?'clear':'normal';
+    const screen=o=>({x:(o.x-view.x)/view.w,y:(o.y-view.y)/view.h}),core=screen(p);
+    root.dataset.dock=core.x>.25&&core.x<.75&&core.y>.83?'clear':'normal';
+    const underBanner=o=>{const s=screen(o);return s.x>.28&&s.x<.72&&s.y>.07&&s.y<.25;};
+    root.dataset.announcement=underBanner(p)||g.enemies.some(e=>e.hp>0&&underBanner(e))?'clear':'normal';
     write('clock',clock(g.t));write('operation',t(g.kind)+(g.kind==='training'?'':' / '+pad(g.round+1,2)));
     write('sectorName',zoneName());write('objective',objective());
     $('wavePips').hidden=g.kind==='training'||g.kind==='rush';
@@ -3211,7 +3250,7 @@ const releaseNotes=[
     const flash=page==='playing'?Math.max(0,(g.hurtFlash-g.t)/.38)*(reduced?.21:1):0;
     $('hurt').style.opacity=flash;
     if(drawDirty||page==='playing'||menu&&!reduced&&ms-lastDraw>=32){
-      renderer.draw(g,{hullLabel:t('hull'),weaponLabel:t('status'+cap(g.mode),{n:g.mode==='ring'?g.weapon.guard:g.mode==='spear'?Math.floor(g.weapon.lock*100):(1+g.weapon.spin*.8).toFixed(1)}),menu,reduced,wall:ms/1000,dt,frozen:page!=='playing',inspect:inspecting,guide,keyLabel,aim:steer,touch:moveTouch?{
+      renderer.draw(g,{edgeBeamLabel:t('edgeBeam'),edgeRingLabel:t('edgeRing'),hullLabel:t('hull'),weaponLabel:t('status'+cap(g.mode),{n:g.mode==='ring'?g.weapon.guard:g.mode==='spear'?Math.floor(g.weapon.lock*100):(1+g.weapon.spin*.8).toFixed(1)}),menu,reduced,wall:ms/1000,dt,frozen:page!=='playing',inspect:inspecting,guide,keyLabel,aim:steer,touch:moveTouch?{
         from:FlightRender.project(FlightRender.camera(g),moveTouch.from.x/Math.max(1,canvas.getBoundingClientRect().width),moveTouch.from.y/Math.max(1,canvas.getBoundingClientRect().height)),
         to:FlightRender.project(FlightRender.camera(g),moveTouch.to.x/Math.max(1,canvas.getBoundingClientRect().width),moveTouch.to.y/Math.max(1,canvas.getBoundingClientRect().height))
       }:null});

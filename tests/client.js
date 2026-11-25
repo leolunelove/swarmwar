@@ -154,7 +154,7 @@ assert(audioStats.voices>firstBeatVoices,'The score advances on the simulation c
 
 report('Client smoke passed: fullscreen and fallback, touch, gamepad, pause, settings, checkpoints, debrief, records, training.');
 
-key('Escape');click(dom.retire);click(dom.changelog);assert(dom.game.dataset.page==='changelog'&&dom.releaseList.children.length===4,'Menu changelog is navigable');key('Escape');click(dom.campaign);click(dom.mapNodes.children[3]);click(dom.mapPractice);assert(game.kind==='sortie'&&game.round===3&&game.unlocked===3,'Map launches the selected chapter as practice');
+key('Escape');click(dom.retire);click(dom.changelog);assert(dom.game.dataset.page==='changelog'&&dom.releaseList.children.length===releaseNotes.length,'Menu changelog is navigable');key('Escape');click(dom.campaign);click(dom.mapNodes.children[3]);click(dom.mapPractice);assert(game.kind==='sortie'&&game.round===3&&game.unlocked===3,'Map launches the selected chapter as practice');
 const idleKills=game.kills;game.nextSpawn=Infinity;frames(80);assert(game.shots.length===0&&game.kills===idleKills,'Idle packaged client never fires');
 const manualTarget=Swarm.spawn(game,'ram',game.player.x+150,game.player.y);manualTarget.dummy=true;key('2');
 const aimEvent={pointerType:'mouse',button:0,pointerId:1,clientX:(manualTarget.x-FlightRender.camera(game).x)/FlightRender.camera(game).w*view.width,clientY:(manualTarget.y-FlightRender.camera(game).y)/FlightRender.camera(game).h*view.height};
@@ -185,3 +185,16 @@ const spaceAfterPause=key(' ');
 assert(spaceAfterPause.defaultPrevented&&game.stats.bursts===payloads+1&&game.charge===0,'Space launches the ready payload even when a combat button retains keyboard focus');
 key('p');game.wave=4;game.bossSpawned=false;game.bossDefeated=false;key('p');
 assert(dom.objective.textContent==='PHASE 5 / 5 · GUARDIAN','Guardian arrival has a single phase label');
+
+// Presentation regressions observed during the live Standard run.
+key('p');game.player.x=game.w*.5;game.player.y=game.h-20;key('h');
+assert(dom.game.dataset.dock==='clear','The dock yields when the core reaches the bottom-center edge');
+const clarityView=FlightRender.camera(game);
+Swarm.spawn(game,'ram',clarityView.x+clarityView.w*.5,clarityView.y+clarityView.h*.15);
+key('h');key('h');
+assert(dom.game.dataset.announcement==='clear','Encounter copy yields to enemies beneath the banner');
+game.hazards=[{type:'ray',x:clarityView.x+clarityView.w*.5,y:clarityView.y-80,endX:game.player.x,endY:game.player.y+100,start:game.t,fire:game.t+.8,end:game.t+1.2,width:14}];
+drawStats.text=[];const clarityTime=game.t;frames(1);
+assert(drawStats.text.some(text=>String(text).startsWith('BEAM 0.8s'))&&game.t===clarityTime,'An offscreen beam shows its actual release countdown during frozen inspection');
+drawStats.text=null;
+report('Combat clarity regressions passed: dock and banner occlusion, offscreen beam deadline.');

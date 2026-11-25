@@ -1,3 +1,15 @@
+# Live Standard v0.1.2.5 attempt — 25 November 2026
+
+A fresh manual Standard campaign on the public Pages build cleared The Array (03:24) and Debris Belt (about 07:03), then The Veil waves 1–3. Browser control timed out after resuming Memory Lock at 09:24; the next successful observation was the defeat debrief at 09:35. Result: two sectors, 429 enemies, peak 65 drones, 324 switches, 150 blocks, 17 interrupts and **zero checkpoint retries**. This was not a campaign clear.
+
+Normal CUA pointer/keyboard inputs controlled manual aim, held Ring/Blades fire, rail release, payloads, movement and drafts. Frequent inspection pauses were used. No runtime health, time, enemies, invulnerability or chapters were injected. Source/rule reads and the rendered DOM boss meter were used to understand UI feedback. Evidence remains in `live-standard-v0.1.2.5-2026-11-25/`.
+
+Confirmed clarity problems: bottom-center core and targets can be covered by formation controls; encounter copy covers upper-center targets; offscreen wall openings are easy to mistake for the blocked side; offscreen beam/ring origins lack a readable release deadline; frozen inspection covers the boss meter. These are presentation findings, not proof that hazard timing or damage is unfair. The run also included avoidable contact and projectile hits while firing or switching late.
+
+The v0.1.2.6 patch adds wall-corridor tint/boundaries and offscreen direction marks, edge countdowns, context-sensitive HUD fading, visible boss state and a lower frozen-inspection bar. Combat simulation and content are unchanged. Full automated checks passed, including the 20-wave/five-boss packaged campaign and new clarity regressions. A fresh full manual campaign after the fixes remains pending.
+
+---
+
 # Preview v0.1.2.5 release checks — 25 November 2026
 
 The prior 2.1 development work is packaged as the requested first preview **v0.1.2.5**. No combat rules were changed in the release packaging pass. `VERSION` drives the menu, changelog and HTML metadata, and `docs/release.json` records the entry HTML's size and SHA-256.

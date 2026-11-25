@@ -591,6 +591,10 @@
   }
   function hud(){
     const p=g.player,boss=g.enemies.find(e=>e.boss),view=FlightRender.camera(g);root.dataset.hud=(p.x-view.x)/view.w<.4&&(p.y-view.y)/view.h<.17?'clear':'normal';root.dataset.utility=(p.x-view.x)/view.w>.8&&(p.y-view.y)/view.h<.17?'clear':'normal';
+    const screen=o=>({x:(o.x-view.x)/view.w,y:(o.y-view.y)/view.h}),core=screen(p);
+    root.dataset.dock=core.x>.25&&core.x<.75&&core.y>.83?'clear':'normal';
+    const underBanner=o=>{const s=screen(o);return s.x>.28&&s.x<.72&&s.y>.07&&s.y<.25;};
+    root.dataset.announcement=underBanner(p)||g.enemies.some(e=>e.hp>0&&underBanner(e))?'clear':'normal';
     write('clock',clock(g.t));write('operation',t(g.kind)+(g.kind==='training'?'':' / '+pad(g.round+1,2)));
     write('sectorName',zoneName());write('objective',objective());
     $('wavePips').hidden=g.kind==='training'||g.kind==='rush';
@@ -722,7 +726,7 @@
     const flash=page==='playing'?Math.max(0,(g.hurtFlash-g.t)/.38)*(reduced?.21:1):0;
     $('hurt').style.opacity=flash;
     if(drawDirty||page==='playing'||menu&&!reduced&&ms-lastDraw>=32){
-      renderer.draw(g,{hullLabel:t('hull'),weaponLabel:t('status'+cap(g.mode),{n:g.mode==='ring'?g.weapon.guard:g.mode==='spear'?Math.floor(g.weapon.lock*100):(1+g.weapon.spin*.8).toFixed(1)}),menu,reduced,wall:ms/1000,dt,frozen:page!=='playing',inspect:inspecting,guide,keyLabel,aim:steer,touch:moveTouch?{
+      renderer.draw(g,{edgeBeamLabel:t('edgeBeam'),edgeRingLabel:t('edgeRing'),hullLabel:t('hull'),weaponLabel:t('status'+cap(g.mode),{n:g.mode==='ring'?g.weapon.guard:g.mode==='spear'?Math.floor(g.weapon.lock*100):(1+g.weapon.spin*.8).toFixed(1)}),menu,reduced,wall:ms/1000,dt,frozen:page!=='playing',inspect:inspecting,guide,keyLabel,aim:steer,touch:moveTouch?{
         from:FlightRender.project(FlightRender.camera(g),moveTouch.from.x/Math.max(1,canvas.getBoundingClientRect().width),moveTouch.from.y/Math.max(1,canvas.getBoundingClientRect().height)),
         to:FlightRender.project(FlightRender.camera(g),moveTouch.to.x/Math.max(1,canvas.getBoundingClientRect().width),moveTouch.to.y/Math.max(1,canvas.getBoundingClientRect().height))
       }:null});
