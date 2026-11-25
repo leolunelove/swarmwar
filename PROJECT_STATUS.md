@@ -1,6 +1,6 @@
 # SWARMWAR handoff
 
-Current release candidate: **v0.1.2.5 / First preview release**. Start here instead of rereading the chat. This packages the former 2.1 development build under the requested four-part preview version. Release destinations and artifacts are in RELEASE_HANDOFF.md.
+Published release: **v0.1.2.5 / First preview release**. Start here instead of rereading the chat. This packages the former 2.1 development build under the requested four-part preview version. Source commit `36ad112` and Pages deployment `45690301325` are verified. Live HTML and the release ZIP match the tested local artifacts; see RELEASE_HANDOFF.md.
 
 - User decisions: fullscreen arena, compact HUD, minimal vector style, restrained iOS-inspired menus; both five chapters and five phases per chapter. Every primary uses manual aim/trigger input. No auto-aim or automatic shooting.
 - Campaign: Array → Belt → Veil → Forge → Core. Four waves + guardian each; 20 waves, 19 module drafts. Route handoff stops time between chapters. Any chapter is playable as clearly labeled practice.

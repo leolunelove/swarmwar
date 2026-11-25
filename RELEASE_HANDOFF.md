@@ -1,4 +1,4 @@
-# SWARMWAR v0.1.2.5 release package — 25 November 2026
+# SWARMWAR v0.1.2.5 published release — 25 November 2026
 
 - Repository: https://github.com/leolunelove/swarmwar
 - Online destination: https://leolunelove.github.io/swarmwar/
@@ -10,7 +10,10 @@
 - Real release smoke: menu/changelog, five-chapter route, launch, manual Ring/Spear/Blades, default Space after resume, frozen weapon annotations, resize pause, narrow viewport and practice defeat. Browser console had no captured errors/warnings. Native fullscreen used its full-window fallback.
 - Known limit: the prior manual Standard campaign cleared four chapters and 18/20 waves before disconnection; full manual victory is not verified. No new combat balance claims are made. Physical touch/gamepad and audible music acceptance remain outstanding.
 - Screenshots: `release-qa-v0.1.2.5/`. Player-facing notes: `RELEASE_NOTES.md`. Build instructions: README.md.
-- Final publication should be checked against `docs/release.json`; expected artifact metadata is above. Publication receipts are kept separately so the source artifact need not change after tagging.
+- Published release commit and tag: `36ad1121cd302a991c08ebba7e7c4d35d49055ef`, `v0.1.2.5`. GitHub confirms published, not draft, with the preview label and both download assets.
+- Pages workflow `45690301325` completed successfully for that commit. A fresh public browser load showed v0.1.2.5 with no captured console errors/warnings. The fetched live manifest and HTML exactly matched local output.
+- The uploaded ZIP was downloaded again and compared byte for byte with the local ZIP. Its checksum matched both SHA256SUMS.txt and GitHub's asset digest: `cf455c70c4b6a66893e9023f7c8f900b625857f6cc0f3ecf4d21da36add803b5`, 69505 bytes. ZIP integrity and its embedded HTML/manifest passed verification.
+- Machine-readable publication receipt: `dist/publication-receipt.json` in the local checkout. Subsequent publication-record edits do not change the tagged game artifact.
 
 ---
 
