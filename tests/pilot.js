@@ -42,7 +42,7 @@ function createPilot(){
     let mode=rec?.mode||(g.unlocked>=3&&close>=2?'blades':g.unlocked>=2&&aim?.armored?'spear':'ring');
     if(mode!==desired){changed=g.t;desired=mode;}
     if(g.t-changed<.12)mode=g.mode;
-    return {x,y,aim,mode,fire:mode!=='spear'||g.weapon.lock<.999,burst:!!boss&&g.charge===100&&d2(boss)<350**2&&aim===boss};
+    return {x,y,aim,mode,fire:mode!=='spear'||g.weapon.lock>=.999&&!g.weapon.held,burst:!!boss&&g.charge===100&&d2(boss)<350**2&&aim===boss};
   };
 }
 function autopilot(seed,options={},seconds=1800){

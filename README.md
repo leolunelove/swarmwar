@@ -1,23 +1,28 @@
-# SWARMWAR — The Signal War
+# SWARMWAR v0.1.2.5 — The Signal War
 
 A fullscreen vector action game about turning one drone into a coordinated swarm. **Every weapon uses manual aim and trigger input.** Move, collect wreckage, reshape the swarm, and choose a build across five chapters.
 
+**First public preview release.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
+
+![SWARMWAR flight terminal](release-qa-v0.1.2.5/menu.jpg)
+
 ## Play
 
-Open **[Play Swarmwar.html](Play%20Swarmwar.html)** in a current browser. The file is self-contained and works offline. Choose **Campaign Map → Start Full Campaign**, or inspect a chapter and choose **Practice This Chapter**. The arena fills the viewport; **F** optionally enters native fullscreen. Browser refusal falls back to the full window.
+Open **[Play Swarmwar.html](Play%20Swarmwar.html)** in a current browser. The file is self-contained and works offline. Choose **Campaign Map → Start Full Campaign**, or inspect a chapter and choose **Practice This Chapter**. The arena fills the viewport; **F** optionally enters native fullscreen. Browser refusal falls back to the full window. Resizing the play area pauses combat; resume explicitly once the new size is stable.
 
 | Input | Action |
 | --- | --- |
 | WASD / arrows | Move |
 | Mouse | Aim, without target snapping |
 | Hold left click | Fire Ring; throw cutters and engage Blades |
-| Hold then release left click | Charge and release a Spear skill shot |
+| Click and release left click | Release Spear's automatically assembled skill shot |
 | 1 / 2 / 3, or Q / E | Select / cycle formations |
 | Space | Launch aimed Kamikaze payload |
-| Esc / P | Pause |
+| P / Esc | Toggle pause and resume (Esc may exit native fullscreen) |
+| H while paused | Inspect the frozen battlefield |
 | F | Toggle native fullscreen |
 
-Touch: left drag moves, right drag aims and fires; lifting the right finger releases Spear. Standard gamepad: left stick moves, right stick aims, RT fires / charges, release RT fires Spear, bumpers cycle, A launches Kamikaze, Start pauses. Keyboard movement and formation bindings can be remapped in Settings. Hardware touch and gamepad testing remains outstanding; their input paths are covered by the client harness.
+Touch: left drag moves, right drag aims and fires; lifting the right finger releases Spear. Standard gamepad: left stick moves, right stick aims, RT fires Ring/Blades, press/release RT releases Spear's stored charge, bumpers cycle, A launches Kamikaze, Start pauses. Keyboard movement and formation bindings can be remapped in Settings. Hardware touch and gamepad testing remains outstanding; their input paths are covered by the client harness.
 
 ## The campaign
 
@@ -37,8 +42,8 @@ Practice launches any chapter with a supplied swarm and foundation modules. It d
 
 ## Weapons and growth
 
-- **Ring:** intercept ordinary bullets; captures store three cells. Your next manual shot spends the full bank on a stronger fan. Mirror empowers manually fired shots; Gravity creates defensive slowing wells.
-- **Spear:** hold to charge, release to shoot along your actual aim. A quarter charge permits a weaker shot. Rails pierce armor and interrupt ordinary wind-ups. Siege takes longer for more power; Arc adds two fixed-angle branches. There is no target search or automatic firing at full charge.
+- **Ring:** intercept ordinary bullets; captures store three cells. Each shot has an exact 28-damage center bolt; additional wings deal 16. Your next manual shot spends the full bank on a stronger fan. Mirror empowers manually fired shots; Gravity creates defensive slowing wells.
+- **Spear:** automatically assembles while equipped. Aim and click/release to shoot; a quarter charge permits a weaker shot. Charge stays stored across formation changes, pause and cancelled input. Rails pierce armor and interrupt ordinary wind-ups. Siege takes longer for more power; Arc adds two fixed-angle branches. There is no target search or automatic firing at full charge.
 - **Blades:** hold the trigger to engage real rotating cutting arcs and throw short-range cutters. Movement increases the sweep rate. Release disengages damage. Long Orbit trades damage for reach; Vortex trades reach for stronger pulling cuts.
 - **Kamikaze:** spend four drones and charge on an aimed explosive carrier. Cluster spreads three smaller charges; Cryo leaves a slowing field. It never selects an enemy automatically.
 
@@ -50,7 +55,7 @@ Mint marks identify safe geometric openings. Ring blocks bullets, **not** beams,
 
 Wave checkpoints, settings, records and badges live in browser storage. Save & Exit resumes the latest wave start. Retry Wave restores at least 65% hull, deducts 20% of score and marks the clear rank R. Clean records require no retries.
 
-Version 2.0 records are separated from the older three-sector campaign. Old checkpoints retain their original sector as **legacy runs** and cannot set five-chapter records or badges. The menu's **Changelog** lists the current release and prior milestones.
+The earlier 2.x labels were development milestones; v0.1.2.5 begins the numbered preview releases. The browser save format is unchanged. Five-chapter records are separated from the older three-sector campaign. Old checkpoints retain their original sector as **legacy runs** and cannot set five-chapter records or badges. The menu's **Changelog** lists the current release and prior milestones.
 
 ## Build and verify
 
@@ -67,3 +72,9 @@ The build inlines `src/` into the offline HTML and copies it to `docs/index.html
 See [PROJECT_STATUS.md](PROJECT_STATUS.md) for a concise handoff, [DESIGN.md](DESIGN.md) for current rules, [VISUAL_AUDIT.md](VISUAL_AUDIT.md) for the five observed clarity problems, and [PLAYTEST.md](PLAYTEST.md) for verification history.
 
 Developed using the [AI Prompts for Game Development](https://github.com/Glitch-Gaming-Platform/AI-Prompts-For-Game-Development) workflow. Visual direction: minimal geometric combat, mint swarm trails, warm hostile patterns, and restrained glass menus.
+
+## Build a release
+
+`VERSION` is the release number used by the menu, changelog, HTML metadata and generated `docs/release.json`. Run `python3 tests/check.py --stress`, then `python3 package_release.py`. The latter creates `dist/SWARMWAR-v0.1.2.5.zip` and `dist/SHA256SUMS.txt`; the ZIP includes the game, instructions and release manifest.
+
+The game has no external runtime assets or build dependencies. A full manual browser campaign is still unverified: the latest run cleared four chapters and 18/20 waves before control disconnected. Automated campaign success is recorded separately in [PLAYTEST.md](PLAYTEST.md).

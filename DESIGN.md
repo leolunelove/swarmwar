@@ -1,10 +1,12 @@
-# SWARMWAR — Campaign Edition 2.0
+# SWARMWAR — Preview v0.1.2.5
 
 ## Design commitments
 
 The arena fills the entire viewport. Menus, draft and pause may cover it while simulation is stopped. The live HUD stays on the edges. Native fullscreen is optional and falls back to the full window. The visual language stays minimal: one bright core, small mint drones, warm geometric threats, mint safe openings, and restrained glass controls.
 
-Every primary is a manually aimed skill shot. Pointer movement alone fires nothing. No primary or payload searches for an enemy. Defensive interception, repair, movement and formation animation may operate without a trigger; direct weapon fire requires deliberate input. Ring stores capture energy until manual release. Spear holds full charge until trigger release. Blades contact damage and short cutters require the held trigger. Formation switching primes Conductor but never launches shots itself. Arc's branches follow fixed angles rather than selecting targets.
+Every primary is a manually aimed skill shot. Pointer movement alone fires nothing. No primary or payload searches for an enemy. Defensive interception, repair, movement and formation animation may operate without a trigger; direct weapon fire requires deliberate input. Ring stores capture energy until manual release. Its aimed center bolt deals 28 damage and additional wings deal 16, so a precise starter shot can kill a 26-hull Standard Skimmer. Spear assembles automatically while equipped and holds full charge until deliberate trigger release. Switching, pause and cancellation preserve its stored charge. The client queues a complete click between simulation frames; pause cancels queued intent. Blades contact damage and short cutters require the held trigger. Formation switching primes Conductor but never launches shots itself. Arc's branches follow fixed angles rather than selecting targets.
+
+P toggles pause/resume without invoking browser fullscreen exit. H while paused shows the actual frozen field with a compact return/resume toolbar. Drafts reject pointer clicks for their first 450 ms so combat clicks do not select, reroll or abort on arrival; keyboard/gamepad activation still requires a new deliberate action.
 
 ## Campaign structure
 

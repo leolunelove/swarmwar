@@ -1,3 +1,90 @@
+# Preview v0.1.2.5 release checks — 25 November 2026
+
+The prior 2.1 development work is packaged as the requested first preview **v0.1.2.5**. No combat rules were changed in the release packaging pass. `VERSION` drives the menu, changelog and HTML metadata, and `docs/release.json` records the entry HTML's size and SHA-256.
+
+`python3 tests/check.py --stress` passed: three seeded campaigns, progression/matchups/combat contracts, packaged UI, a complete automated 20-wave/five-guardian campaign in 1055 simulated seconds, Boss Rush in 100 seconds, and an hour-long simulation soak (33 sectors, 52 resizes). Packaging verifies matching offline/Pages bytes and ZIP integrity.
+
+Fresh real-browser smoke used an isolated QA origin on port 8767. Confirmed: v0.1.2.5 menu/changelog, five-chapter map, campaign launch, pause/View Field, manual Ring fire and movement, Black Core practice, all formation selections, automatic Spear assembly and deliberate release (visible rail with charge reduced to 18%), default Space payload immediately after P/H/P resume (64→60 drones and 100→0 charge), resize to 390×844 pausing the live run, no horizontal overflow at that width, and a natural idle-defeat debrief. The native fullscreen request returned the full-window fallback; the arena filled 1280×720. No captured browser console errors or warnings. Screenshots: `release-qa-v0.1.2.5/`.
+
+This smoke pass is separate from the previous long Standard run and does not complete it. The full manual campaign, physical touch/gamepad acceptance and audible music remain unverified. Deployment and release artifact evidence are recorded in RELEASE_HANDOFF.md.
+
+---
+
+# Standard real-browser continuation — 24 November 2026
+
+**Partial real-browser campaign: four chapters cleared, 18 of 20 waves cleared, four guardians defeated, zero checkpoint retries. Full victory remains UNVERIFIED.** The same manual run reached Black Core / Prism Choir at **15:37**, with **86/144 hull**, before browser control disconnected completely. The final pause could not be confirmed after the connection dropped. Do not resume a checkpoint and call it the same no-retry run.
+
+Normal pointer/keyboard inputs controlled movement, aim, trigger release, formations, payload and upgrades. Spear assembled automatically but was released manually. No runtime state, health, clock, invulnerability or chapter was injected. Frequent P/H pauses were used to inspect the field between short action batches; this is not evidence of an uninterrupted real-time human clear.
+
+| Chapter | Guardian cleared at | Hull at clear | Result |
+| --- | --- | --- | --- |
+| The Array | 02:59 | 95/100 | All five phases and route handoff observed |
+| Debris Belt / Salvage Tide | 06:52 | 55/100 | All five phases and route handoff observed |
+| The Veil / Quiet Archive | 10:19 | 79/122 | All five phases and route handoff observed |
+| Cinder Forge / Cooling Cycle | 14:05 | 122/122 | All five phases and route handoff observed |
+| Black Core / Siege Matrix | Not cleared | 86/144 at 15:37 | Outer Membrane and Pulse Garden cleared; Prism Choir started |
+
+Evidence: `standard-clean-2026-11-24/`, including each chapter route handoff. `chapter-04-to-05-route.jpg` records arrival at the final chapter. The last saved field capture is `496-pulse-garden-control-recovery.jpg`; later narrow-screen recovery and Prism Choir entry were observed in tool screenshots but did not persist in the local evidence directory before disconnection.
+
+## Findings and fixes in this continuation
+
+- **Confirmed: viewport change left combat running with invalid coordinates.** At 15:15, the panel unexpectedly shrank from landscape to 539×751. An aimed input was rejected, and delayed recovery left hull at 22, then 9 during escape. The same run recovered normally, without retry, and cleared Pulse Garden. The client now pauses before rescaling a changed play area and clears held input. This is an input safeguard; it does not change combat timing, damage or enemy rules.
+- **Confirmed: Space could fail after keyboard pause/inspection when a button retained focus.** The run used Settings to remap payload to V from chapter three onward. Gameplay now reserves mapped Space for the payload even when a combat button has keyboard focus. Pause/resume also releases overlay focus as before.
+- **Confirmed: frozen View Field omitted weapon annotations and offscreen threat indicators.** Inspection now draws the same annotations and edge contacts while simulation time stays frozen.
+- **Confirmed: guardian arrival duplicated the phase prefix and could retain old formation advice.** The HUD now shows one guardian phase label and clears advice during arrival/secured states.
+- **Observed, not established as unfair:** late beams were easy to miss when their casters were offscreen or a different warning dominated attention. Mint openings and locked beam lanes were present; several hits followed late routing or long input batches. No impossible overlap was confirmed. Banner overlap near the upper-center core remains a visual follow-up.
+
+The played build used Bastion, Phase Conductor, Foundry, Nanite Mesh 2, Auxiliary Guns 2, Mirror Kernel, Core Plating, Thrusters 2, Rotor Edge 2, Vortex Spindle, Echo Shield, Battle Recycler and Hot Charge; Core Plating 2 was chosen after Pulse Garden. Ring capture returns, deliberate piercing rails, close Blades recovery damage and payload bursts were distinct in actual play. No Spear core was offered in this run. This single defensive build cannot establish all upgrade/core balance. Forge was comfortable with its sustain; Belt was substantially more dangerous before the build matured. No enemy, hazard, weapon or upgrade values were changed during this continuation.
+
+## Validation of the local fixes
+
+`python3 tests/check.py` passed, including focused regressions for resize pause/frozen time/cleared movement, payload Space on a focused combat button, frozen weapon annotations and the single guardian phase label. The packaged automated controller still completed all 20 waves, five guardians and 19 upgrades in 1055 simulated seconds, and Boss Rush in 100 seconds. These do not substitute for the unfinished browser run.
+
+The new fixes are **not yet rechecked in a real browser**, because browser control remained disconnected even after a reset attempt. Local 2.1 remains unpublished; public 2.0 is unchanged. Still required: reconnect, inspect the original run's actual state, and finish Prism Choir, Heartlock and the Core Sovereign if the run survived. If it did not survive, a fresh chapter-one run is required for a valid no-checkpoint clear.
+
+---
+
+# Campaign Edition 2.1 — 24 November 2026
+
+**Requested full real-browser Standard campaign with manual input and zero checkpoint retries: NOT COMPLETED.** Real runs reached Array phase two, then ended in defeat. Browser input repeatedly stalled in both Chrome and the in-app browser; some long gaps left the core stationary. Those contaminated attempts cannot establish a fair difficulty curve. No checkpoint retry was used, no chapter was skipped, and no runtime state, health, invulnerability or game clock was modified in the browser.
+
+## Changes and observed evidence
+
+- Spear previously required held charging. It now assembles automatically while equipped, never fires by itself, and releases along the manually selected bearing. Stored charge survives switching, pause and cancelled pointers. Real Array combat exercised automatic assembly, deliberate release and formation changes. Quick pointer down/up pairs between simulation frames are now queued once; pause cancels queued intent. Mouse, touch and gamepad paths also pass the client harness.
+- Ring's old even-sized fans could leave no bolt on the exact aim line, and its 16-damage starter bolt needed two hits against a 26-hull Standard Skimmer. It now always has a 28-damage center bolt; extra wings remain 16. Real play showed aimed picks clearing lead chasers. This is a local opening-combat adjustment, not evidence that late Ring builds are balanced.
+- One combat click selected Bastion as the first draft opened. A 450 ms pointer guard now protects selection, rerouting and abort. The next real run stopped correctly on its draft and deliberately rerouted to Foundry. Regression checks reject early clicks and accept a pointer selection after the guard expires.
+- Defeat advice had recommended locked Blades. It now explains a Ring escape route and the phase/drone unlock until Blades is available. The revised text was observed in an Array defeat with locked Blades.
+- P now toggles pause/resume without invoking fullscreen exit. H/View Field shows the actual frozen arena under a small toolbar. Repeated live checks used that frozen field to inspect enemies, gaps and shot directions. Simulation time stays frozen in the client regression.
+
+Enemy stats, spawn groups, hazard timing/damage, upgrade values and global protocol multipliers were not changed in this pass. Foundry and Nanite choices were sampled in opening waves only; their late-campaign balance is still unverified.
+
+## Real-browser coverage
+
+The isolated local QA origin was `http://127.0.0.1:8766/`, keeping public-game browser progress separate. Screenshots are in `standard-2.1-2026-11-24/`.
+
+| Build / browser | Observed outcome | Checkpoint retries | Qualification |
+| --- | --- | --- | --- |
+| Initial 2.1 / Chrome | Array phase two defeat, 00:50, 8 peak drones, 11 kills | 0 | Before precise Ring center shot |
+| RC2 / Chrome | Healthy at 00:15; later observed defeat at 00:28 | 0 | Connection interrupted input |
+| RC2 / in-app browser | Native fullscreen and held movement/fire verified; defeat at 00:20 | 0 | Control interruption |
+| RC3 / in-app browser | Array phase two defeat, 00:48, 14 peak drones, 16 kills | 0 | Carried click chose Bastion; stationary inspection gap |
+| RC4 / in-app browser | Array phase two defeat, 01:01, 24 peak drones, 24 kills | 0 | Foundry selected deliberately; final input stalled |
+| RC5 / Chrome | Array phase two defeat, 00:48, 9 peak drones, 15 kills | 0 | Nanite Mesh; one input batch advanced 14 seconds for about 5 seconds of intended movement |
+
+Native fullscreen succeeded in the in-app browser. Chrome retained the full-window fallback. The arena filled both tested content viewports (1280×720 and 1352×671). Ring, Spear, Blades, Kamikaze, first draft/reroute, phase-one-to-two transition, pause/inspection/resume, and defeat were exercised with normal pointer/keyboard input. Chapters two through five and later phase transitions were **not reached in these real campaign attempts**.
+
+## Final automated verification
+
+`python3 tests/check.py` passed after the final code changes. Three seeded simulation campaigns cleared in 1082, 1051 and 1082 simulated seconds, each peaking at 237 drones with 144 final hull. The packaged-client controller completed all 20 waves, five guardians and 19 choices in 1055 simulated seconds, including two viewport changes; Boss Rush completed in 100 seconds. Endless exercised ten sectors in 999 simulated seconds. These are automated controllers, not the requested manual browser campaign or a human win-rate estimate.
+
+Checks include passive rail assembly without aim/fire, no automatic full-charge shot, stored charge across switching, manual miss direction, exact Ring center/wings, a complete mouse click between frames, cancellation/pause intent, draft click guard, locked defeat advice, and frozen-field inspection.
+
+Final generated offline and Pages files match: SHA-256 `bbee308c66aa1c7834a8dbc5471cae096ec89af899b5a78ddc34a8813ccf9be2`; 227947 bytes each, self-contained with no external asset dependency. Version 2.1 is local and has not been deployed. The previous verified public release is 2.0.
+
+Still required: a complete real-browser Standard campaign without retries on a reliable input connection, all five chapter handoffs, late weapon/core and sustain comparisons, maximum-swarm readability, physical touch/gamepad testing and audible music review. Do not mark this request complete from the automated results.
+
+---
+
 # Campaign Edition 2.0 — 23 November 2026
 
 Current build changes the campaign to five chapters and makes every weapon manual. Earlier records below describe earlier builds and their automatic targeting; they are historical, not evidence for the new weapon balance.

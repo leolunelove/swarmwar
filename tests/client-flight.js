@@ -16,6 +16,7 @@ function fly(kind,limit){
       if(kind==='campaign'&&sectors===2){view.width=1920;view.height=1080;observer();}
     }
     if(dom.game.dataset.page==='map')click(dom.mapDeploy);
+    if(dom.game.dataset.page==='paused')click(dom.resume);
     const input=pilot(game),size=Math.max(1,Math.hypot(input.x,input.y));
     const x=input.x/size,y=input.y/size,length=Math.hypot(x,y);
     const out=length?(.20+.80*length)/length:0;

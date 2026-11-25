@@ -526,7 +526,7 @@ const FlightRender=(()=>{
         if(f.type==='gravity')ring(c,f.x,f.y,f.radius*(.35+Swarm.beatPhase(g)*.5));c.restore();
       }
       hazards(g,state.reduced);projectiles(g);enemies(g,state.reduced);swarm(g,state);effects(g,state.reduced);
-      if(!state.frozen){annotations(g,state);edgeContacts(g,view);}
+      if(!state.frozen||state.inspect){annotations(g,state);edgeContacts(g,view);}
       c.restore();
     }
     return {draw};

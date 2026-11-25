@@ -2,3 +2,4 @@ combat-fixtures.html
 .DS_Store
 __pycache__/
 *.pyc
+dist/

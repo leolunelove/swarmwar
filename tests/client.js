@@ -30,9 +30,13 @@ click(dom.manualBack);
 assert(dom.game.dataset.page==='paused'&&game.t===before,'Manual returns to the same paused run');
 click(dom.resume);frames(3);
 assert(game.t>before,'Resume restores the run');
-view.width=390;view.height=844;observer();frames(2);
+key('d');view.width=390;view.height=844;observer();frames(2);
 assert(Math.abs(game.w/game.h-390/844)<.00001,'Portrait viewport is filled at native aspect ratio');
 assert(dom.canvas.width===780&&dom.canvas.height===1688,'Portrait canvas uses both axes at device resolution');
+assert(dom.game.dataset.page==='paused','A viewport change pauses before stale input can advance combat');
+const resizedTime=game.t;frames(40);assert(game.t===resizedTime,'Resized playfield stays frozen until explicit resume');
+const resizedX=game.player.x;click(dom.resume);frames(2);
+assert(game.player.x===resizedX,'Resuming after resize cannot leave the old movement key stuck');
 const pointer=(id,x,y)=>({pointerType:'touch',pointerId:id,clientX:x,clientY:y});
 const x0=game.player.x;
 dom.canvas.send('pointerdown',pointer(7,33,419));dom.canvas.send('pointermove',pointer(7,105,419));frames(14);
@@ -68,9 +72,13 @@ assert(dom.tactical.hidden,'Disabled Tactical Guide stays hidden');
 game.phase='draft';game.draft=['plating','lance','thrusters'];frames(1);
 assert(dom.game.dataset.page==='draft'&&dom.upgradeList.children.length===3,'Sector completion offers three upgrade cards');
 assert(document.activeElement===dom.draftTitle,'Upgrade screen does not focus an actionable card');
+dom.upgradeList.children[0].send('click',{detail:1});
+assert(dom.game.dataset.page==='draft'&&!game.upgrades.plating,'A click carried across the combat transition cannot select a draft card');
+dom.draftBack.send('click',{detail:1});
+assert(dom.game.dataset.page==='draft','A carried combat click cannot abort the run');
 key('1');key('2');key('3');key(' ');
 assert(dom.game.dataset.page==='draft','Combat formation and burst keys cannot silently select an upgrade');
-click(dom.upgradeList.children[0]);
+frames(28);dom.upgradeList.children[0].send('click',{detail:1});
 assert(game.round===1&&game.player.max===122&&dom.game.dataset.page==='map','Upgrade applies the choice and stages the next chapter on the chart');click(dom.mapDeploy);
 const checkpoint=JSON.parse(storage.get('swarmwar.checkpoints.v1')).campaign;
 assert(checkpoint.round===1&&checkpoint.upgrades.plating===1,'Choosing a module saves the next sector');
@@ -114,7 +122,7 @@ for(let i=0;i<1000&&dom.game.dataset.page==='playing';i++){
   if(stage===1&&game.mode!=='spear')key('2');
   if(stage===2&&game.mode!=='blades')key('3');
   if(stage===3&&target&&game.charge===100)key(' ');
-  if(target)dom.canvas.send(game.mode==='spear'&&game.weapon.lock>=.999?'pointerup':'pointerdown',{pointerType:'mouse',button:0,pointerId:1,clientX:(target.x-FlightRender.camera(game).x)/FlightRender.camera(game).w*view.width,clientY:(target.y-FlightRender.camera(game).y)/FlightRender.camera(game).h*view.height});
+  if(target)dom.canvas.send(game.mode==='spear'?(game.weapon.held?'pointerup':game.weapon.lock>=.999?'pointerdown':'pointermove'):'pointerdown',{pointerType:'mouse',button:0,pointerId:1,clientX:(target.x-FlightRender.camera(game).x)/FlightRender.camera(game).w*view.width,clientY:(target.y-FlightRender.camera(game).y)/FlightRender.camera(game).h*view.height});
   frames(1);
 }
 assert(game.phase==='trained'&&dom.debriefTitle.textContent==='FLIGHT CERTIFIED','All four drills are playable through the packaged UI');
@@ -130,7 +138,8 @@ const waveSave=JSON.parse(storage.get('swarmwar.checkpoints.v1')).campaign;
 assert(game.round===0&&game.wave===1&&waveSave.wave===1&&waveSave.version===3,'A wave module resumes the same sector and saves its wave');
 key('Escape');click(dom.retire);click(dom.continueRun);
 assert(game.wave===1&&game.round===0&&game.rerolls===0,'Continue restores the selected wave and spent reroute');
-game.phase='lost';frames(1);
+game.phase='lost';game.lastHit='skimmer';game.unlocked=2;frames(1);
+assert(dom.debriefNote.textContent.includes('17 drones'),'Defeat advice never recommends locked Blades');
 assert(dom.retry.textContent==='RETRY WAVE'&&dom.debriefNote.textContent.includes('20%'),'Defeat offers the checkpoint with its visible score cost');
 click(dom.retry);
 assert(dom.game.dataset.page==='playing'&&game.wave===1&&game.retries===1&&game.player.hp>=65,'Checkpoint retry uses the normal packaged button and restores the wave');
@@ -145,12 +154,17 @@ assert(audioStats.voices>firstBeatVoices,'The score advances on the simulation c
 
 report('Client smoke passed: fullscreen and fallback, touch, gamepad, pause, settings, checkpoints, debrief, records, training.');
 
-key('Escape');click(dom.retire);click(dom.changelog);assert(dom.game.dataset.page==='changelog'&&dom.releaseList.children.length===3,'Menu changelog is navigable');key('Escape');click(dom.campaign);click(dom.mapNodes.children[3]);click(dom.mapPractice);assert(game.kind==='sortie'&&game.round===3&&game.unlocked===3,'Map launches the selected chapter as practice');
+key('Escape');click(dom.retire);click(dom.changelog);assert(dom.game.dataset.page==='changelog'&&dom.releaseList.children.length===4,'Menu changelog is navigable');key('Escape');click(dom.campaign);click(dom.mapNodes.children[3]);click(dom.mapPractice);assert(game.kind==='sortie'&&game.round===3&&game.unlocked===3,'Map launches the selected chapter as practice');
 const idleKills=game.kills;game.nextSpawn=Infinity;frames(80);assert(game.shots.length===0&&game.kills===idleKills,'Idle packaged client never fires');
 const manualTarget=Swarm.spawn(game,'ram',game.player.x+150,game.player.y);manualTarget.dummy=true;key('2');
 const aimEvent={pointerType:'mouse',button:0,pointerId:1,clientX:(manualTarget.x-FlightRender.camera(game).x)/FlightRender.camera(game).w*view.width,clientY:(manualTarget.y-FlightRender.camera(game).y)/FlightRender.camera(game).h*view.height};
 dom.canvas.send('pointerdown',aimEvent);frames(70);assert(game.stats.railShots===0&&game.weapon.lock===1,'Client holds a full rail without firing');dom.canvas.send('pointerup',aimEvent);frames(15);assert(game.stats.railShots===1&&manualTarget.hp<manualTarget.max,'Client release fires the aimed skill shot');
-dom.canvas.send('pointerdown',aimEvent);frames(20);key('Escape');click(dom.resume);frames(30);assert(game.stats.railShots===1&&game.weapon.lock===0,'Pause discards held input without a phantom release');
+dom.canvas.send('pointerdown',aimEvent);frames(20);key('Escape');click(dom.resume);frames(30);assert(game.stats.railShots===1&&game.weapon.lock>0,'Pause discards held intent while preserving automatically assembled charge');
+frames(70);const quickShots=game.stats.railShots;
+dom.canvas.send('pointerdown',aimEvent);dom.canvas.send('pointerup',aimEvent);frames(2);
+assert(game.stats.railShots===quickShots+1,'A complete click between simulation frames releases exactly one stored rail');
+frames(70);dom.canvas.send('pointerdown',aimEvent);dom.canvas.send('pointerup',aimEvent);key('p');key('p');frames(2);
+assert(game.stats.railShots===quickShots+1,'Pause cancels a queued release before its simulation tick');
 report('Campaign edition controls passed: chart, practice, changelog, manual rail release and pause safety.');
 
 assert(!dom.upgradeList.children.some(b=>(b.querySelector('.upgrade-effect')?.textContent||'').includes('..')),'Draft effects do not duplicate terminal punctuation');
@@ -158,5 +172,16 @@ assert(!dom.upgradeList.children.some(b=>(b.querySelector('.upgrade-effect')?.te
 game.phase='won';frames(1);assert(dom.debriefTitle.textContent==='CHAPTER SECURED'&&dom.debriefKicker.textContent.includes('PRACTICE'),'Practice victory cannot claim a full campaign');click(dom.retry);assert(game.kind==='sortie'&&game.round===3,'Practice redeploy preserves the selected chapter');
 
 key('2');game.nextSpawn=Infinity;const touchRails=game.stats.railShots;const touchAim=pointer(99,view.width*.85,view.height*.5);dom.canvas.send('pointerdown',touchAim);frames(70);assert(game.weapon.lock===1,'Touch can hold a full manual rail');dom.canvas.send('pointerup',touchAim);frames(12);assert(game.stats.railShots===touchRails+1&&game.aim===null,'Lifting the right finger releases the rail before clearing touch aim');
-const cancelRails=game.stats.railShots;dom.canvas.send('pointerdown',{...aimEvent,clientX:view.width*.7});frames(30);dom.canvas.send('pointercancel',{...aimEvent,clientX:view.width*.7});frames(20);assert(game.stats.railShots===cancelRails&&game.weapon.lock===0,'Pointer cancellation discards charge instead of shooting');
+const cancelRails=game.stats.railShots;dom.canvas.send('pointerdown',{...aimEvent,clientX:view.width*.7});frames(30);dom.canvas.send('pointercancel',{...aimEvent,clientX:view.width*.7});frames(20);assert(game.stats.railShots===cancelRails&&game.weapon.lock>0,'Pointer cancellation preserves assembled charge without shooting');
 pad={index:0,connected:true,mapping:'standard',axes:[0,0,1,0],buttons:Array.from({length:17},()=>({pressed:false}))};pad.buttons[7].pressed=true;frames(70);pad.axes[2]=0;frames(2);assert(game.weapon.lock===1&&game.stats.railShots===cancelRails,'Neutral right stick retains manual bearing without releasing a held rail');pad.buttons[7].pressed=false;frames(12);assert(game.stats.railShots===cancelRails+1,'Releasing RT fires along the last manually selected bearing');pad=null;report('Manual release paths passed: mouse, touch, gamepad, cancellation and pause.');
+const inspectionTime=game.t;key('p');assert(dom.game.dataset.page==='paused','P pauses a run');key('h');frames(50);assert(!dom.flight.hidden&&dom.pauseMenu.hidden&&!dom.inspectBar.hidden&&game.t===inspectionTime,'View Field reveals the actual frozen battlefield without advancing the run');key('h');assert(!dom.pauseMenu.hidden&&dom.inspectBar.hidden,'H restores the pause dialog');key('p');frames(1);assert(dom.game.dataset.page==='playing'&&game.t>inspectionTime,'P resumes without relying on browser Escape');
+assert(document.activeElement===null,'Keyboard resume releases pause-menu focus');
+key('p');key('h');drawStats.text=[];frames(1);
+assert(drawStats.text.some(text=>String(text).startsWith('RAIL ')),'Frozen View Field retains the actual weapon annotation');
+drawStats.text=null;key('p');
+game.drones=40;game.charge=100;const payloads=game.stats.bursts;
+dom.pause.focus();dom.pause.matches=()=>true;
+const spaceAfterPause=key(' ');
+assert(spaceAfterPause.defaultPrevented&&game.stats.bursts===payloads+1&&game.charge===0,'Space launches the ready payload even when a combat button retains keyboard focus');
+key('p');game.wave=4;game.bossSpawned=false;game.bossDefeated=false;key('p');
+assert(dom.objective.textContent==='PHASE 5 / 5 · GUARDIAN','Guardian arrival has a single phase label');

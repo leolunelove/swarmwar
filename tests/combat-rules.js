@@ -32,7 +32,7 @@ function boltAt(g,e,kind='ally',hit=50,vx=60){
   Swarm.step(g,{aim:e,fire:false});advance(g,.25,{aim:e,fire:false});
   check(g.stats.railShots===1&&e.hp<10000,'Releasing fires exactly one charged skill shot');
   advance(g,.4,{aim:{x:p.x-200,y:p.y},fire:false});
-  check(g.stats.railShots===1&&g.weapon.lock===0&&p.angle>3,'Aiming elsewhere never creates another rail');
+  check(g.stats.railShots===1&&g.weapon.lock>0&&p.angle>3,'Aiming elsewhere never creates another rail');
   const base=Swarm.chargeDuration(g);g.upgrades.siege=1;check(Swarm.chargeDuration(g)>base,'Siege pays for power with a longer charge');
 }
 {
@@ -174,7 +174,7 @@ check(Content.sectors.every(s=>s.bpm>=100&&s.bpm<=130),'All sectors define a sha
   const g=combatRoom('spear'),p=g.player;g.nextFire=0;
   const decoy=Swarm.spawn(g,'sentry',p.x+100,p.y+100);decoy.dummy=true;
   const caster=Swarm.spawn(g,'weaver',p.x+230,p.y);caster.dummy=true;caster.wind=2;caster.attack='weave';caster.hp=caster.max=1000;
-  advance(g,.95,{aim:null,fire:true});check(g.shots.length===0&&g.weapon.lock===0&&p.angle===0,'Trigger without a supplied aim never selects a target');
+  advance(g,.95,{aim:null,fire:true});check(g.shots.length===0&&g.weapon.lock===1&&p.angle===0,'Trigger without a supplied aim never selects a target');
   advance(g,.8,{aim:{x:p.x,y:p.y-220},fire:true});Swarm.step(g,{aim:{x:p.x,y:p.y-220},fire:false});
   check(g.shots[0].vy<0&&caster.hp===1000&&decoy.hp===decoy.max,'Manual rail can miss every visible enemy and never snaps toward a wind-up');
 }
@@ -221,3 +221,17 @@ check(Content.sectors.every(s=>s.bpm>=100&&s.bpm<=130),'All sectors define a sha
   for(let i=0;i<18*60;i++){Swarm.step(g);check(g.enemies.filter(e=>!e.boss&&e.hp>0).length<=4,'Sovereign summons and scheduled escorts share one four-enemy budget');}
 }
 report('Combat rules passed: manual capture release, no automatic aiming or firing, real blade arcs, eight core alternatives, enemy shields, interruptible tells, safe geometry gaps, and boss escort budgets.');
+
+{
+  const g=combatRoom('spear'),p=g.player;g.nextFire=0;
+  advance(g,.8,{aim:null,fire:false});check(g.weapon.lock===1&&g.stats.railShots===0,'Rail assembles automatically without aim or held trigger and never self-fires');
+  Swarm.setMode(g,'ring');advance(g,.5,{aim:null,fire:false});check(g.weapon.lock===1,'Changing formation stores a ready rail');Swarm.setMode(g,'spear');
+  const aim={x:p.x,y:p.y-200};Swarm.step(g,{aim,fire:true});Swarm.step(g,{aim,fire:false});check(g.stats.railShots===1&&g.weapon.lock===0&&g.shots.every(b=>b.vy<0),'A quick manual release spends the assembled rail in the selected direction');
+}
+
+{
+  const g=combatRoom(),p=g.player;g.drones=1;g.nextFire=0;const e=Swarm.spawn(g,'skimmer',p.x+120,p.y);e.dummy=true;
+  advance(g,.3,{aim:e,fire:true});check(e.hp<=0&&g.kills===1,'One accurately aimed central Ring shot defeats a fresh Standard Skimmer');
+  const fan=combatRoom();fan.drones=44;fan.nextFire=0;Swarm.step(fan,{aim:{x:fan.player.x+300,y:fan.player.y},fire:true});
+  check(fan.shots.filter(b=>b.primary).length===1&&Math.abs(fan.shots.find(b=>b.primary).vy)<.001&&fan.shots.filter(b=>!b.primary).every(b=>b.hit===16),'Additional Ring emitters preserve one true center skill shot and weaker wings');
+}

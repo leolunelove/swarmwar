@@ -5,7 +5,7 @@ const quiet=()=>{
   const g=create(12);g.nextSpawn=1000;g.salvage=[];return g;
 };
 function ticks(g,s,input={}){
-  for(let i=0;i<s*60;i++)step(g,{aim:g.aim||{x:g.player.x+300,y:g.player.y},fire:g.mode!=='spear'||g.weapon.lock<.999,...input});
+  for(let i=0;i<s*60;i++)step(g,{aim:g.aim||{x:g.player.x+300,y:g.player.y},fire:g.mode!=='spear'||g.weapon.lock>=.999&&!g.weapon.held,...input});
 }
 function atPlayer(g,n){
   for(let i=0;i<n;i++)g.salvage.push({x:g.player.x,y:g.player.y,vx:0,vy:0});
@@ -110,7 +110,7 @@ function close(a,b){return Math.abs(a-b)<.00001;}
     const miss=d===3&&misses<3&&g.charge===100&&target;
     if(miss)misses++;
     const fire=d===3&&target&&(miss||misses>=3&&g.stats.bursts===3&&g.charge===100&&!g.shots.length);
-    step(g,{fire:d!==1||g.weapon.lock<.999,mode:['ring','spear','blades','ring'][d],aim:miss?{x:p.x,y:p.y-200}:target,burst:!!fire});
+    step(g,{fire:d!==1||g.weapon.lock>=.999&&!g.weapon.held,mode:['ring','spear','blades','ring'][d],aim:miss?{x:p.x,y:p.y-200}:target,burst:!!fire});
   }
   assert(g.phase==='trained'&&g.events.filter(e=>e.id==='training_completed').length===4,'All four playable drills finish');
   assert(misses===3&&g.stats.bursts===4,'Kamikaze drill recovers from repeated misses');

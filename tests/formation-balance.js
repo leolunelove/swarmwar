@@ -1,5 +1,5 @@
 const check=(ok,message)=>{if(!ok)throw new Error(message);};
-const advance=(g,seconds,input={})=>{for(let n=0;n<seconds*60;n++)Swarm.step(g,{aim:g.aim||{x:g.player.x+300,y:g.player.y},fire:g.mode!=='spear'||g.weapon.lock<.999,...input});};
+const advance=(g,seconds,input={})=>{for(let n=0;n<seconds*60;n++)Swarm.step(g,{aim:g.aim||{x:g.player.x+300,y:g.player.y},fire:g.mode!=='spear'||g.weapon.lock>=.999&&!g.weapon.held,...input});};
 function arena(mode){
   const g=Swarm.create(71);
   g.unlocked=3;g.drones=44;g.salvage=[];g.nextSpawn=Infinity;g.player.inv=0;g.player.angle=0;

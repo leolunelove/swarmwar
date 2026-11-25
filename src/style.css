@@ -345,3 +345,6 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 #game[data-page="playing"][data-hud="clear"] .mission,#game[data-page="playing"][data-hud="clear"] .readout{opacity:.12}
 
 #game[data-page="playing"][data-utility="clear"] .utility{opacity:.12}#game[data-page="playing"][data-utility="clear"] .utility:hover,#game[data-page="playing"][data-utility="clear"] .utility:focus-within{opacity:1}
+
+.inspect-bar{position:absolute;z-index:9;top:var(--top);left:50%;translate:-50% 0;display:flex;gap:9px;align-items:center;width:max-content;max-width:94vw;padding:5px 10px;border:1px solid var(--glass-edge);border-radius:99px;background:#0c1d27e8;color:#b6d9d4;font:11px var(--mono)}.inspect-bar .text-button{font-size:11px;padding:5px 9px}.inspect-bar span{font-size:10px}#game[data-inspect="true"] .utility{opacity:.25}#game[data-inspect="true"] #flight .formations{pointer-events:none;opacity:.7}
+@media(max-width:580px){.inspect-bar{gap:3px}.inspect-bar span{font-size:8px}.inspect-bar .text-button{font-size:9px}}

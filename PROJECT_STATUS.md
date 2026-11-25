@@ -1,13 +1,17 @@
 # SWARMWAR handoff
 
-Current build: **Campaign Edition 2.0 / The Signal War**. Start here instead of rereading the chat.
+Current release candidate: **v0.1.2.5 / First preview release**. Start here instead of rereading the chat. This packages the former 2.1 development build under the requested four-part preview version. Release destinations and artifacts are in RELEASE_HANDOFF.md.
 
 - User decisions: fullscreen arena, compact HUD, minimal vector style, restrained iOS-inspired menus; both five chapters and five phases per chapter. Every primary uses manual aim/trigger input. No auto-aim or automatic shooting.
 - Campaign: Array → Belt → Veil → Forge → Core. Four waves + guardian each; 20 waves, 19 module drafts. Route handoff stops time between chapters. Any chapter is playable as clearly labeled practice.
-- Controls: WASD, mouse aim, hold left click for Ring/Blades; hold/release for Spear. 1/2/3 select, Q/E cycle, Space payload, Esc pause, F fullscreen.
+- Controls: WASD, mouse aim, hold left click for Ring/Blades. Spear assembles automatically while equipped; aim and click/release to fire. Switching, pausing and cancellation preserve stored charge. 1/2/3 select, Q/E cycle, Space payload, P toggles pause/resume, H shows the frozen field while paused, F fullscreen.
 - Source roles and workflow: see AGENTS.md. Run `python3 build.py`, then `python3 tests/check.py`. Optional `--stress` exercises an accelerated hour. The browser preview is a simple static server in this directory.
 - Generated outputs: `Play Swarmwar.html` and `docs/index.html`. Never edit them directly.
 - Records: v2 store; v1 history remains untouched. Earlier checkpoints are labeled legacy and excluded from new campaign ranks.
-- Audit evidence and five findings: VISUAL_AUDIT.md. Verification: top of PLAYTEST.md. Browser evidence lives in `audit-2026-11-23/`.
-- Validation limit: automated full runs establish completion and regression coverage, not human balance. Real touch/gamepad hardware and a human full five-chapter clear still need testing.
+- Included fixes: precise 28-damage Ring center bolt (extra wings remain 16), quick rail releases latched between frames, 450 ms pointer guard on drafts, locked-formation defeat advice, P resume and View Field. Enemy stats, hazards, global protocol multipliers and upgrade values were not changed.
+- Continuation fixes: viewport changes pause before rescaling and clear held input; mapped Space works with a focused combat button; frozen inspection retains annotations and edge contacts; guardian arrival copy and stale advice are cleared. These are interface/input changes only.
+- Audit evidence and five findings: VISUAL_AUDIT.md. Verification: top of PLAYTEST.md. Latest browser evidence lives in `standard-clean-2026-11-24/`; prior opening attempts are in `standard-2.1-2026-11-24/`; the earlier audit is in `audit-2026-11-23/`.
+- Validation limit: latest manual in-app browser Standard run cleared chapters 1–4, their guardians and route handoffs, and Black Core phases 1–2, with zero checkpoint retries. It reached Prism Choir at 15:37, 86/144 hull. Browser control disconnected during fullscreen recovery; the last pause and current live outcome could not be confirmed. Full five-chapter real-browser victory is NOT complete. Frequent inspection pauses and one defensive build limit balance conclusions. See latest PLAYTEST.md entry. Release browser smoke verified manual rail assembly/release, Space payload after keyboard resume, formation switching, frozen annotations, resize pause, chapter practice and defeat. Native fullscreen fell back to the filled browser viewport in the release-test browser. A fresh full manual campaign remains unverified.
 - Next focused design pass: human run with manual fire, especially late hull sustain and whether nineteen upgrades leave enough meaningful choices. Do not silently change damage or protocol rules during a visual audit.
+
+- Release identity: VERSION is the single source for build labels. `python3 package_release.py` emits the offline ZIP and checksum. `docs/release.json` exposes the exact version, HTML byte size and SHA-256 for deployment verification.

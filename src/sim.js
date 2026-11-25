@@ -40,7 +40,7 @@ const Swarm=(()=>{
   }
   function alliedBolt(g,x,y,a,speed,hit,kind='ally',pierce=0,life=.8){
     if(g.shots.length>=90)return;
-    g.shots.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,life,hit,pierce,kind,seen:[]});
+    const bolt={x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,life,hit,pierce,kind,seen:[]};g.shots.push(bolt);return bolt;
   }
   function guardResponse(g,b){
     const p=g.player,w=g.weapon;
@@ -50,19 +50,18 @@ const Swarm=(()=>{
     cue(g,'guard');
   }
 
-  function updateWeapon(g,input,dt,targetAim){
+  function updateWeapon(g,input,dt){
     const w=g.weapon,p=g.player,moving=Math.hypot(input.x||0,input.y||0)>.16;
-    const held=input.fire===true&&!!g.aim, released=w.held&&!held;
+    const held=input.fire===true&&!!g.aim, released=input.release===true||w.held&&!held;
     w.spin=clamp(w.spin+(g.mode==='blades'&&held&&moving?dt*.85:-dt*.38),0,1);
     if(g.mode==='blades')w.phase+=dt*(2.7+w.spin*2.2)*(level(g,'vortex')?1.15:1);
     if(g.mode==='spear'){
-      if(held)w.lock=clamp(w.lock+dt/chargeDuration(g),0,1);
+      // Assembly is automatic; only an intentional trigger release can launch it.
+      w.lock=clamp(w.lock+dt/chargeDuration(g),0,1);
       if(released){
-        if(w.lock>=.25&&g.t>=g.nextFire&&fire(g)){w.railFlash=g.t+.18;g.nextFire=g.t+.16;g.stats.railShots++;}
-        w.lock=0;
+        if(w.lock>=.25&&g.t>=g.nextFire&&fire(g)){w.railFlash=g.t+.18;g.nextFire=g.t+.16;g.stats.railShots++;w.lock=0;}
       }
     }else{
-      w.lock=0;
       if(held&&g.t>=g.nextFire&&(g.kind!=='training'||g.training.index!==0)){
         g.nextFire=g.t+(g.mode==='blades'?.52:level(g,'mirror')?.54:.35);fire(g);
       }
@@ -606,7 +605,11 @@ const Swarm=(()=>{
     }
     const charged=w.guard>=3,mirror=level(g,'mirror')&&w.guard>0;
     const n=Math.min(4,1+Math.floor(g.drones/24))+level(g,'scatter')+(charged?2:0);
-    for(let i=0;i<n;i++)alliedBolt(g,p.x+Math.cos(p.angle)*18,p.y+Math.sin(p.angle)*18,p.angle+(i-(n-1)/2)*.12,charged?670:620,16+(charged?22:0)+(mirror?12:0),mirror?'reflect':charged?'counter':'ally',charged?1:0);
+    for(let i=0;i<n;i++){
+      const offset=i===0?0:Math.ceil(i/2)*(i%2?1:-1)*.12;
+      const bolt=alliedBolt(g,p.x+Math.cos(p.angle)*18,p.y+Math.sin(p.angle)*18,p.angle+offset,charged?670:620,(i===0?28:16)+(charged?22:0)+(mirror?12:0),mirror?'reflect':charged?'counter':'ally',charged?1:0);
+      if(bolt)bolt.primary=i===0;
+    }
     if(charged){w.guard=0;w.guardFlash=g.t+.32;g.stats.counterSalvos++;cue(g,'counter');}
     else if(mirror)w.guard--;
     cue(g,'shotRing');return true;
@@ -887,7 +890,7 @@ const Swarm=(()=>{
       p.hp=Math.min(p.max,p.hp+(g.repair?3:0)+level(g,'nanites')*2);
     }
     g.fields=g.fields.filter(f=>g.t<f.end);
-    updateWeapon(g,input,dt,targetAim);
+    updateWeapon(g,input,dt);
     if(!g.bossDefeated){
       for(const e of g.enemies)moveEnemy(g,e,dt);
       projectiles(g,dt);

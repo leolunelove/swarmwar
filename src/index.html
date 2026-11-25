@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#071218">
+<meta name="application-version" content="__SWARMWAR_VERSION__">
 <title>SWARMWAR</title>
 <style>/* @STYLE */</style>
 </head>
@@ -93,6 +94,7 @@
       <p id="pauseInfo"></p>
       <div class="actions">
         <button type="button" id="resume" class="button primary" data-t="resume"></button>
+        <button type="button" id="inspectField" class="button" data-t="inspectField"></button>
         <button type="button" id="pauseSettings" class="button" data-t="settings"></button>
         <button type="button" id="pauseManual" class="text-button" data-t="manual"></button>
         <button type="button" id="retire" class="text-button" data-t="retire"></button>
@@ -100,6 +102,8 @@
       <p class="control-help" id="pauseControls"></p>
     </div>
   </section>
+
+  <div id="inspectBar" class="inspect-bar" hidden><span data-t="inspectHint"></span><button type="button" id="inspectResume" class="text-button" data-t="resume"></button><button type="button" id="inspectBack" class="text-button" data-t="back"></button></div>
 
   <section id="options" class="screen modal" aria-labelledby="optionsTitle" hidden>
     <div class="sheet compact">

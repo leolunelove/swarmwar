@@ -1,6 +1,7 @@
 """Build and test the offline game without dependencies."""
 from html.parser import HTMLParser
 from pathlib import Path
+import hashlib
 import json
 import shutil
 import subprocess
@@ -10,6 +11,14 @@ import tempfile
 root = Path(__file__).resolve().parent.parent
 subprocess.run([sys.executable, str(root / "build.py")], check=True)
 html = (root / "Play Swarmwar.html").read_text()
+artifact = (root / "Play Swarmwar.html").read_bytes()
+manifest = json.loads((root / 'docs/release.json').read_text())
+version = (root / 'VERSION').read_text().strip()
+assert artifact == (root / 'docs/index.html').read_bytes(), 'Offline and Pages builds differ'
+assert manifest['version'] == version and manifest['bytes'] == len(artifact), 'Release identity mismatch'
+assert manifest['sha256'] == hashlib.sha256(artifact).hexdigest(), 'Release hash mismatch'
+assert f'CAMPAIGN EDITION / v{version}' in html and f'version:\'{version}\'' in html, 'Menu and changelog version mismatch'
+assert '__SWARMWAR_VERSION__' not in html, 'Unresolved version placeholder'
 jsc = Path("/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc")
 runtime = shutil.which("node") or (str(jsc) if jsc.exists() else None)
 if not runtime:

@@ -31,6 +31,7 @@ for(const k of ['setTransform','fillText','fillRect','moveTo','lineTo','arc','tr
   drawing[k]=(...args)=>{
     for(const a of args)if(typeof a==='number')assert(Number.isFinite(a),'Non-finite Canvas coordinate in '+k);
     if(k==='arc')assert(args[2]>=0,'Negative arc radius');
+    if(k==='fillText'&&drawStats.text)drawStats.text.push(args[0]);
     drawStats.calls++;
   };
 }
