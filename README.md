@@ -1,10 +1,10 @@
-# SWARMWAR v0.1.2.7 — The Signal War
+# SWARMWAR v0.1.2.8 — Orbital depth
 
 A fullscreen vector action game about turning one drone into a coordinated swarm. **Every weapon uses manual aim and trigger input.** Move, collect wreckage, reshape the swarm, and choose a build across five chapters.
 
-**Standard campaign field fixes.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
+**Orbital depth preview release.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
 
-![SWARMWAR flight terminal](release-qa-v0.1.2.5/menu.jpg)
+![SWARMWAR orbital depth](depth-preview-v0.1.2.8/orbital-depth-preview.jpg)
 
 ## Play
 
@@ -23,6 +23,12 @@ Open **[Play Swarmwar.html](Play%20Swarmwar.html)** in a current browser. The fi
 | F | Toggle native fullscreen |
 
 Touch: left drag moves, right drag aims and fires; lifting the right finger releases Spear. Standard gamepad: left stick moves, right stick aims, RT fires Ring/Blades, press/release RT releases Spear's stored charge, bumpers cycle, A launches Kamikaze, Start pauses. Keyboard movement and formation bindings can be remapped in Settings. Hardware touch and gamepad testing remains outstanding; their input paths are covered by the client harness.
+
+## Orbital depth preview
+
+Three parallax star layers, shaded planetary horizons, faint nebula light and distant chapter architecture make the 2D fight feel suspended in space. Enemy hulls have subtle side faces; the core carries a restrained engine halo. Each chapter has a different celestial backdrop. Reduced Motion removes extra parallax and star drift. The combat camera, aiming, hitboxes, rules and balance values are unchanged.
+
+The same self-contained space-look build is available online and in the generated offline HTML.
 
 ## The campaign
 

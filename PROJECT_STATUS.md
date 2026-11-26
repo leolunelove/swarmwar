@@ -1,7 +1,8 @@
 # SWARMWAR handoff
 
-Current source: **v0.1.2.7 / Standard campaign field fixes**. v0.1.2.5 remains the original tagged offline download. Build and deployment identity are recorded in RELEASE_HANDOFF.md.
+Current source: **v0.1.2.8 / Orbital depth**. Deployment destination: https://leolunelove.github.io/swarmwar/. v0.1.2.5 remains the original tagged offline download. Build and deployment identity are recorded in RELEASE_HANDOFF.md.
 
+- Orbital depth: cached shaded planets/nebula light per chapter, three parallax star layers with slow drift, foreshortened lower architecture, shaded hull sides and core engine halo. Stars are occluded by planets. Reduced Motion disables extra parallax/drift; pause freezes it. Combat camera/projection and simulation are unchanged. Play: https://leolunelove.github.io/swarmwar/. Visual evidence: `depth-preview-v0.1.2.8/`. The publication check compares the deployed HTML and manifest to this exact build.
 - User decisions: fullscreen arena, compact HUD, minimal vector style, restrained iOS-inspired menus; both five chapters and five phases per chapter. Every primary uses manual aim/trigger input. No auto-aim or automatic shooting.
 - Campaign: Array → Belt → Veil → Forge → Core. Four waves + guardian each; 20 waves, 19 module drafts. Route handoff stops time between chapters. Any chapter is playable as clearly labeled practice.
 - Controls: WASD, mouse aim, hold left click for Ring/Blades. Spear assembles automatically while equipped; aim and click/release to fire. Switching, pausing and cancellation preserve stored charge. 1/2/3 select, Q/E cycle, Space payload, P toggles pause/resume, H shows the frozen field while paused, F fullscreen.

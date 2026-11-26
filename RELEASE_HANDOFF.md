@@ -1,3 +1,15 @@
+# SWARMWAR v0.1.2.8 orbital-depth build acceptance
+
+- Repository: https://github.com/leolunelove/swarmwar. Pages destination: https://leolunelove.github.io/swarmwar/.
+- Entry HTML: 238995 bytes; SHA-256 `69e3a3b2561c8ceddff80d4a6d27cdb27ed5ddf44368ad57cd1271a9e066bccf`. Offline HTML and `docs/index.html` are byte-identical. `docs/release.json` identifies v0.1.2.8.
+- Full `python3 tests/check.py` acceptance covers packaged UI, finite Canvas coordinates, combat/progression contracts, automated twenty-wave/five-guardian campaign and Boss Rush.
+- Real-browser visual checks: all five chapter backdrops, manual movement/fire/formation changes, Array wave-one upgrade transition, frozen pause inspection, Core idle defeat, reduced-motion option and 390×844 layout. No captured console warnings/errors. Evidence: `depth-preview-v0.1.2.8/`.
+- This release changes the renderer and associated copy/test Canvas fixture. Simulation, encounters, aim projection, controls, damage and upgrade values are unchanged.
+- Publication acceptance requires a successful Pages workflow for the pushed commit and byte-for-byte equality of live HTML/manifest with the files above. A local `dist/publication-receipt-v0.1.2.8.json` records the observed result.
+- v0.1.2.5 remains the original tagged ZIP. This update publishes the current source and browser build.
+
+---
+
 # SWARMWAR v0.1.2.7 field-fix build acceptance
 
 - Repository and deployment destination: https://github.com/leolunelove/swarmwar and https://leolunelove.github.io/swarmwar/.

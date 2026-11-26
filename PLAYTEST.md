@@ -1,3 +1,13 @@
+# Orbital depth v0.1.2.8 release checks — 26 November 2026
+
+The visual-only build adds cached planetary lighting and nebulae, three sparse parallax star layers, lower-plane orbital architecture, shaded hull edges and a core engine halo. Stars behind a planet are occluded. The camera and aim projection are unchanged; `src/sim.js`, encounter data, damage and upgrades are untouched. Reduced Motion disables decorative star drift and extra background parallax. Frozen inspection uses the paused simulation time, so scenery does not continue drifting.
+
+Real-browser checks covered all five chapter practice backdrops at 1280×720, movement and manual Ring/rail/Blades/payload inputs in Array and Core, ordinary bullets/charge/mine feedback, P/H frozen inspection, the title, a natural Array wave-one upgrade transition, and a deliberate idle defeat in Core practice. The defeat smoke is not a difficulty result. The scene retained readable warm enemy outlines and mint weapon feedback against its dim blue/purple backgrounds. Portrait inspection at 390×844 filled the canvas with no horizontal overflow; viewport override was then reset. Reduced Motion was inspected on, then switched off to exercise extra parallax. No captured browser warnings/errors. Screenshots: `depth-preview-v0.1.2.8/`.
+
+`python3 tests/check.py` passed, verifying the offline/Pages identity, finite Canvas calls, packaged UI, simulation contracts, full automated campaign and Boss Rush. The Canvas fixture now supports clipping used by cached planet surfaces. This is not a new full manual campaign or a physical-device/performance benchmark. Publishing is authorized for this exact space-look build. Deployment acceptance checks the GitHub Pages workflow commit plus the public HTML and release manifest against the tested local files. A local publication receipt records the result.
+
+---
+
 # Public Standard campaign clear and v0.1.2.7 field fixes
 
 A **fresh public v0.1.2.6 Standard campaign**, started from chapter one, completed all **twenty waves and five guardians with zero checkpoint retries**. Browser inputs manually controlled movement, aim, held Ring/Blades fire, stored rail release, payloads, upgrades and route deployment. Frequent P/H inspection pauses were used. There were no reloads, checkpoint continuations, injected runtime state or automated combat controller in this successful run. This is a pause-assisted manual clear, not a continuous reflex benchmark or a claim about typical win rates.

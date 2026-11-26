@@ -1,8 +1,8 @@
 {
   "name": "SWARMWAR",
-  "version": "0.1.2.7",
+  "version": "0.1.2.8",
   "channel": "preview",
   "entry": "index.html",
-  "sha256": "4299238530eb9dbbceec614bea8b0a2e6d89ac954c2fac420b535d74f27efa83",
-  "bytes": 233487
+  "sha256": "69e3a3b2561c8ceddff80d4a6d27cdb27ed5ddf44368ad57cd1271a9e066bccf",
+  "bytes": 238995
 }

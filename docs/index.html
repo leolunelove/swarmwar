@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#071218">
-<meta name="application-version" content="0.1.2.7">
+<meta name="application-version" content="0.1.2.8">
 <title>SWARMWAR</title>
 <style>:root{
   color-scheme:dark;--bg:#071218;--paper:#e8f6f2;--muted:#9db5ba;--faint:#65858a;--edge:#79b7bb38;--cyan:#92f8eb;--gold:#ffd487;--salmon:#ff867f;
@@ -573,7 +573,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   legacyRun:'LEGACY RUN · NO CAMPAIGN RECORD',controlsDesktop:'{move} or arrows move · Mouse aims · Hold left click for Ring/Blades; Spear builds automatically, click/release to fire · {forms} select · {burst} Kamikaze · P pauses/resumes; H inspects while paused. Touch and gamepad controls are in Settings.',controlsTouch:'Drag left to move; drag right to aim and fire. Lift the right finger to release Spear. Tap the formation dock to switch or launch Kamikaze.',controlsPad:'Left stick moves · Right stick aims · RT holds fire; release RT for Spear · Bumpers switch · A launches Kamikaze · Start pauses.',
   inspectField:'VIEW FIELD',inspectHint:'PAUSED · H returns · P resumes',
   title:'SWARMWAR',tagline:'ONE DRONE. MANY FORMS.',
-  menuTag:'SWARM OPERATIONS / FLIGHT TERMINAL',menuCredit:'SECTOR NETWORK / LOCAL CONTROL',menuBuild:'CAMPAIGN EDITION / v0.1.2.7',
+  menuTag:'SWARM OPERATIONS / FLIGHT TERMINAL',menuCredit:'SECTOR NETWORK / LOCAL CONTROL',menuBuild:'CAMPAIGN EDITION / v0.1.2.8',
   quickControls:'{move} MOVE · LEFT CLICK FIRE · {forms} FORMATIONS',
   brief:'A lone signal against a machine empire. Recover the fallen. Build your swarm. Aim every shot.',
   campaignAction:'CAMPAIGN MAP',endlessAction:'ENDLESS RUN',rushAction:'BOSS RUSH',trainingAction:'TRAINING',trainingPassed:'TRAINING ✓',continueRun:'CONTINUE {kind}',savedStatus:'CHECKPOINT / {protocol} · SECTOR {n}',saveExit:'SAVE & EXIT',settings:'SETTINGS',manual:'FIELD MANUAL',records:'FLIGHT RECORDS',
@@ -597,7 +597,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   audio:'Sound effects',music:'Music',guide:'Tactical Guide',reduced:'Reduce flashes and shake',autoFull:'Enter fullscreen when deploying',
   audioHelp:'Weapons, pickups, hits, and alerts.',musicHelp:'Quiet synth score that builds as the fight escalates.',
   guideHelp:'Shows a formation and its key when a threat calls for a switch.',
-  reducedHelp:'Removes shake and softens motion and impact effects.',
+  reducedHelp:'Removes shake, star drift and extra background parallax; softens impact effects.',
   autoFullHelp:'Uses your browser’s fullscreen mode when available.',
   on:'ON',off:'OFF',
   campaign:'CAMPAIGN',endless:'ENDLESS',training:'TRAINING',rush:'BOSS RUSH',round:'SECTOR {n}',trainingCount:'DRILL {n} / 4',
@@ -739,6 +739,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 };
 
 const releaseNotes=[
+ {version:'0.1.2.8',date:'26 NOV 2026',title:'Orbital depth preview',items:['Three layers of parallax stars, shaded planetary horizons and faint nebula light give the arena a sense of depth.','Each chapter has its own celestial backdrop: a listening orbit, cratered moon, ringed gas giant, furnace world and eclipsed reactor.','Distant chapter architecture sits on a foreshortened lower plane. Ships have shaded hull edges and the player has a subtle engine halo.','The combat camera, manual aiming, hitboxes and all balance values are unchanged. Reduced Motion removes extra background parallax.']},
  {version:'0.1.2.7',date:'25 NOV 2026',title:'Standard campaign field fixes',items:['A quick Spear release now fires its stored rail immediately after Ring or Blades fire, using its own release cooldown.','The mouse formation dock yields to enemies beneath it as well as the player, keeping aimed shots on the battlefield.','Dash and recovery guidance names the current guardian, including the Crucible.','Formation input during sector-clear animations no longer shows a false drone requirement. Combat notices clear when leaving the playfield.','A fresh public Standard campaign cleared all five chapters with manual aim and fire, inspection pauses and zero checkpoint retries. Enemy damage, hazard timing and upgrade values are unchanged.']},
  {version:'0.1.2.6',date:'25 NOV 2026',title:'Clearer combat lanes',items:['Moving-wall corridors have a mint tint, stronger boundaries and direction marks when the opening is outside the camera.','Offscreen beam and broken-ring sources show their release countdown at the arena edge, independently of formation advice.','Encounter announcements fade when a player or enemy sits beneath them. The formation dock fades over the core and lets mouse shots pass through while keyboard shortcuts remain available.','Guardian health now shows its exposed, shielded or enraged state. Frozen inspection leaves the boss meter visible.','Enemy damage, attack timing, weapon values, upgrade values and difficulty rules are unchanged.']},
  {version:'0.1.2.5',date:'25 NOV 2026',title:'First preview release',items:['Five chapters, twenty waves, five guardians and nineteen upgrade choices. Explore the campaign map or practice a chapter.','Spear builds its rail automatically while equipped. Aim and click/release to launch it; charge never fires by itself.','Stored rail charge survives formation changes, pause and pointer cancellation. Quick clicks are registered between frames.','Ring always fires a straight 28-damage center shot, with weaker extra fan bolts. Defeat advice respects locked formations.','A short draft input guard prevents carried combat clicks from selecting modules or aborting.','P toggles pause without leaving fullscreen. View Field retains weapon and threat markers while frozen.','Changing the play area pauses combat and clears held input. Space remains the payload key even if a combat button has focus.','Guardian arrivals show one phase label and clear advice left over from the previous wave.']},
@@ -1848,6 +1849,8 @@ const releaseNotes=[
   const families={wave:'#f6a9c6',sweep:'#ff9caa',debris:'#e3c3a4',surge:'#ff9acd',skimmer:'#ff9c87',sentry:'#ffac91',ram:'#ff8a83',splitter:'#f4a2c6',mine:'#f9c478',
     pulsar:'#f6a9c6',weaver:'#ffc48b',bulwark:'#d4b5ff',prism:'#f7a1eb',warden:'#ff8b82',reaver:'#ff97bb',sovereign:'#ffd4e8'};
   const starfield=Array.from({length:160},(_,i)=>[((i*293.783)%997)/997,((i*181.673)%991)/991,((i*67)%90)/100]);
+  const spaceBodies={array:[.84,.24,.34,'#3b647a'],belt:[.12,.64,.31,'#635969'],veil:[.82,.26,.44,'#365c82'],forge:[.83,.78,.40,'#755344'],core:[.58,.44,.40,'#514260']};
+  const starDepth=[.08,.22,.48];
   const svgPaths={
     ring:'<circle cx="16" cy="16" r="10"/><circle cx="16" cy="16" r="3"/><path d="M16 2v7m0 14v7M2 16h7m14 0h7"/>',
     spear:'<path d="m28 16-21-9 6 9-6 9zM13 16H2m25 0H17"/>',
@@ -1901,9 +1904,80 @@ const releaseNotes=[
   function project(view,u,v){return {x:view.x+u*view.w,y:view.y+v*view.h};}
   function create(canvas){
     const c=canvas.getContext('2d',{alpha:false});
-    const background=document.createElement('canvas'),grid=background.getContext('2d',{alpha:false});
+    const background=document.createElement('canvas'),grid=background.getContext('2d');
+    const sky=document.createElement('canvas'),space=sky.getContext('2d',{alpha:false});
     let bw=0,bh=0,theme=null,droneVisuals=[],lastKey='',lastGame=null;
     const cachedShapes={};
+
+    function bakeSpace(w,h,zone){
+      sky.width=background.width;sky.height=background.height;
+      space.setTransform(sky.width/w,0,0,sky.height/h,0,0);
+      space.fillStyle='#030710';space.fillRect(0,0,w,h);
+      // Cached light and planet surfaces: no per-frame blur or texture allocation.
+      for(const [u,v,r,color] of [[.21,.35,.72,zone.palette[1]+'ba'],[.83,.77,.52,zone.palette[2]+'13']]){
+        const haze=space.createRadialGradient(w*u,h*v,0,w*u,h*v,Math.max(w,h)*r);
+        haze.addColorStop(0,color);haze.addColorStop(1,'#03071000');space.fillStyle=haze;space.fillRect(0,0,w,h);
+      }
+      const [u,v,size,lit]=spaceBodies[zone.id],x=w*u,y=h*v,r=Math.min(w,h)*size;
+      const orbit=(front=false)=>{
+        space.save();space.translate(x,y);space.rotate(-.28);space.scale(1,.25);
+        space.strokeStyle=front?'#738ea13d':'#738ea125';space.lineWidth=front?3:5;
+        space.beginPath();space.arc(0,0,r*1.65,front?0:Math.PI,front?Math.PI:TAU);space.stroke();
+        space.lineWidth=1;space.beginPath();space.arc(0,0,r*1.78,front?0:Math.PI,front?Math.PI:TAU);space.stroke();space.restore();
+      };
+      if(zone.id==='veil'||zone.id==='core')orbit();
+      const atmosphere=space.createRadialGradient(x,y,r*.96,x,y,r*1.12);
+      atmosphere.addColorStop(0,lit+'00');atmosphere.addColorStop(.42,lit+'32');atmosphere.addColorStop(1,lit+'00');
+      space.fillStyle=atmosphere;circle(space,x,y,r*1.12);space.fill();
+      const surface=space.createRadialGradient(x-r*.48,y-r*.5,r*.03,x,y,r*1.09);
+      surface.addColorStop(0,lit);surface.addColorStop(.48,zone.id==='forge'?'#251d23':'#182736');surface.addColorStop(1,'#040812');
+      space.fillStyle=surface;circle(space,x,y,r);space.fill();
+      space.save();circle(space,x,y,r);space.clip();
+      if(zone.id==='belt'){
+        for(let i=0;i<14;i++){
+          const a=i*2.39996,d=r*(.18+(i%5)*.16),cr=r*(.055+(i%3)*.025),px=x+Math.cos(a)*d,py=y+Math.sin(a)*d;
+          space.fillStyle='#080d1880';circle(space,px,py,cr);space.fill();space.strokeStyle='#a4a0aa24';space.lineWidth=1;space.beginPath();space.arc(px,py,cr,.9,3.8);space.stroke();
+        }
+      }else if(zone.id==='forge'){
+        // Night-side furnace seams stay far dimmer than live orange telegraphs.
+        space.strokeStyle='#aa70462b';space.lineWidth=1.2;
+        for(let i=0;i<7;i++){const yy=y-r*.6+i*r*.21;line(space,x-r*.7,yy,x+r*.18,yy+r*.14);line(space,x+r*.18,yy+r*.14,x+r*.4,yy-r*.1);}
+      }else{
+        space.save();space.translate(x,y);space.rotate(-.28);space.scale(1,.31);
+        space.strokeStyle='#b2c9d011';space.lineWidth=r*.065;
+        for(const k of [.35,.65,.9])ring(space,0,0,r*k);space.restore();
+      }
+      const night=space.createRadialGradient(x+r*.46,y+r*.20,r*.3,x+r*.3,y+r*.15,r*1.2);
+      night.addColorStop(0,'#02050ee8');night.addColorStop(.63,'#02050e95');night.addColorStop(1,'#02050e00');
+      space.fillStyle=night;space.fillRect(x-r,y-r,r*2,r*2);space.restore();
+      space.strokeStyle=lit+'55';space.lineWidth=.9;space.beginPath();space.arc(x,y,r,3.35,5.35);space.stroke();
+      if(zone.id==='veil'||zone.id==='core')orbit(true);
+      // A dark outer falloff keeps bright scenery away from the HUD and arena edge.
+      const falloff=space.createRadialGradient(w*.5,h*.5,Math.min(w,h)*.28,w*.5,h*.5,Math.hypot(w,h)*.65);
+      falloff.addColorStop(0,'#02050e00');falloff.addColorStop(1,'#02050e9c');space.fillStyle=falloff;space.fillRect(0,0,w,h);
+    }
+
+    function depthBackdrop(g,view,state){
+      const cx=view.x+view.w*.5,cy=view.y+view.h*.5,parallax=state.reduced?0:1,dx=(cx-g.w*.5)*parallax,dy=(cy-g.h*.5)*parallax;
+      const skyX=view.x-view.w*.12-dx*.055,skyY=view.y-view.h*.12-dy*.055,skyW=view.w*1.24,skyH=view.h*1.24;
+      c.drawImage(sky,skyX,skyY,skyW,skyH);
+      const [bu,bv,bs]=spaceBodies[theme.id],planetX=skyX+skyW*bu,planetY=skyY+skyH*bv,planetR=Math.min(skyW,skyH)*bs;
+      const wrap=(n,size)=>((n%size)+size)%size;
+      const drift=state.reduced?0:state.menu?state.wall:g.t;
+      // Camera translation, not pointer aim, supplies parallax. The play plane never tilts.
+      for(const [i,star] of starfield.entries()){
+        const [u,v,a]=star,layer=i%3,depth=starDepth[layer],margin=16;
+        const x=view.x+wrap(u*(view.w+margin*2)-dx*depth-drift*depth*.5,view.w+margin*2)-margin;
+        const y=view.y+wrap(v*(view.h+margin*2)-dy*depth+drift*depth*.22,view.h+margin*2)-margin;
+        if((x-planetX)**2+(y-planetY)**2<planetR**2)continue;
+        const r=layer===0?.42:layer===1?.64:.9;
+        c.fillStyle=layer===2?'#b1c4d57a':layer===1?'#a2b7cf51':'#8eabc535';c.fillRect(x,y,r,r);
+        if(a>.8&&layer===2){c.fillStyle='#b1c4d51b';c.fillRect(x-2,y,5,.6);c.fillRect(x,y-2,.6,5);}
+      }
+      // Orbital architecture sits on a lower, foreshortened plane. It has no hitboxes.
+      c.save();c.translate(cx,cy);c.scale(1,.78);c.translate(-cx+dx*.38,-cy+dy*.38+22);
+      c.globalAlpha=.30;c.drawImage(background,0,0,g.w,g.h);c.restore();
+    }
 
     function bake(w,h,zone){
       if(w===bw&&h===bh&&theme===zone)return;
@@ -1911,12 +1985,10 @@ const releaseNotes=[
       const s=Math.min(1,1600/Math.max(w,h));
       background.width=Math.ceil(w*s);background.height=Math.ceil(h*s);
       grid.setTransform(background.width/w,0,0,background.height/h,0,0);
-      const [dark,light,accent]=zone.palette;
-      const gradient=grid.createRadialGradient(w*.61,h*.42,10,w*.53,h*.50,Math.hypot(w,h)*.62);
-      gradient.addColorStop(0,light);gradient.addColorStop(1,dark);
-      grid.fillStyle=gradient;grid.fillRect(0,0,w,h);
-      const spacing=zone.id==='belt'?38:32;
-      grid.strokeStyle=accent+'16';grid.lineWidth=1;grid.beginPath();
+      bakeSpace(w,h,zone);
+      const [dark,,accent]=zone.palette;
+      const spacing=zone.id==='belt'?76:64;
+      grid.strokeStyle=accent+'0d';grid.lineWidth=1;grid.beginPath();
       for(let x=spacing;x<w;x+=spacing){grid.moveTo(x,0);grid.lineTo(x,h);}
       for(let y=spacing;y<h;y+=spacing){grid.moveTo(0,y);grid.lineTo(w,y);}
       grid.stroke();
@@ -1971,9 +2043,6 @@ const releaseNotes=[
         grid.setLineDash([6,8]);line(grid,w*.57,0,w*.57,h);line(grid,0,h*.48,w,h*.48);grid.setLineDash([]);
       }
       // Keep scenery a quiet layer below telegraphs and enemies.
-      grid.fillStyle=dark+'78';grid.fillRect(0,0,w,h);
-      grid.fillStyle=accent+'26';
-      for(const [x,y,a] of starfield)grid.fillRect(x*w,y*h,a>.70?2:1.05,a>.70?2:1.05);
       grid.strokeStyle=accent+'46';grid.lineWidth=1.1;
       for(const [x,y,a,b] of [[12,12,1,1],[w-12,12,-1,1],[12,h-12,1,-1],[w-12,h-12,-1,-1]]){
         grid.beginPath();grid.moveTo(x+a*21,y);grid.lineTo(x,y);grid.lineTo(x,y+b*21);grid.stroke();
@@ -2129,13 +2198,16 @@ const releaseNotes=[
           ring(c,e.x,e.y,e.r+7+(.35-age)*62);
           c.globalAlpha=.38+age*1.77;
         }
-        c.save();c.translate(e.x,e.y);c.rotate(e.angle);
         const flash=!reduce&&e.flash>g.t,wind=e.wind>g.t,col=e.boss&&Swarm.sector(g).id==='veil'?'#d2b5ff':e.boss&&Swarm.sector(g).id==='forge'?'#ffc28a':families[e.type];
+        const points=cachedShapes[e.type]??=(enemyShapes[e.type](e.r)),depth=e.boss?5:3;
+        c.save();c.translate(e.x+1.5,e.y+depth);c.rotate(e.angle);
+        c.fillStyle='#050912';c.strokeStyle=col+'48';c.lineWidth=1.2;path(c,points);c.fill();c.stroke();c.restore();
+        c.save();c.translate(e.x,e.y);c.rotate(e.angle);
         c.lineWidth=e.boss?2.7:1.75;
         c.strokeStyle=flash?(e.hitKind==='spear'?'#c8fff5':e.hitKind==='blade'?'#d5ff9d':'#fff7ec'):wind?'#ffe0a2':col;
-        c.fillStyle=flash?'#ffb1a88a':col+'2d';
-        const points=cachedShapes[e.type]??=(enemyShapes[e.type](e.r));
+        c.fillStyle=flash?'#ffb1a88a':'#141824e8';
         path(c,points);c.fill();c.stroke();
+        c.fillStyle=col+'18';path(c,points);c.fill();
         if(e.departAt!==undefined){c.globalAlpha=.38;c.strokeStyle='#9bf4de';}
         if(e.boss||e.type==='prism'||e.type==='sentry'){
           c.strokeStyle=col;ring(c,0,0,e.r*(e.boss?.43:.32));
@@ -2258,8 +2330,12 @@ const releaseNotes=[
         triangle(c,d.x+dx*4.8,d.y+dy*4.8,d.x-dx*3.3-dy*2.4,d.y-dy*3.3+dx*2.4,d.x-dx*3.3+dy*2.4,d.y-dy*3.3-dx*2.4);c.fill();
       }
       c.globalAlpha=!state.reduced&&p.inv>0&&Math.floor(p.inv*15)%2?.66:1;
+      const engine=c.createRadialGradient(p.x-cos*12,p.y-sin*12,1,p.x-cos*12,p.y-sin*12,25);
+      engine.addColorStop(0,'#7cefdc22');engine.addColorStop(1,'#7cefdc00');c.fillStyle=engine;circle(c,p.x-cos*12,p.y-sin*12,25);c.fill();
       c.translate(p.x,p.y);c.rotate(ang);
       c.fillStyle='#06141b';circle(c,0,0,18);c.fill();c.strokeStyle='#c5fff39c';c.lineWidth=.8;ring(c,0,0,18);
+      c.fillStyle='#133039';path(c,[[14,3],[-8,-6],[-4,3],[-8,12]]);c.fill();
+      c.fillStyle='#10212b';path(c,[[14,0],[-8,-9],[-4,0],[-8,9]]);c.fill();
       c.strokeStyle='#eafffa';c.lineWidth=1.75;path(c,[[14,0],[-8,-9],[-4,0],[-8,9]]);c.stroke();
       c.fillStyle='#cafff3';path(c,[[7,0],[-4,-4],[-2,0],[-4,4]]);c.fill();
       c.restore();
@@ -2368,7 +2444,7 @@ const releaseNotes=[
       const view=state.menu?{x:0,y:0,w:g.w,h:g.h}:camera(g);
       const sx=canvas.width/view.w,sy=canvas.height/view.h;
       c.setTransform(sx,0,0,sy,-view.x*sx,-view.y*sy);
-      c.drawImage(background,0,0,g.w,g.h);
+      depthBackdrop(g,view,state);
       if(state.menu){menuArt(g.w,g.h,state.wall,state.reduced);return;}
       const key=g.round+':'+(g.training?.index??'-');
       if(key!==lastKey||g!==lastGame){lastKey=key;lastGame=g;droneVisuals=[];}
@@ -2377,18 +2453,6 @@ const releaseNotes=[
         const shake=Math.max(0,(g.hurtFlash-g.t)/.38);
         c.translate(Math.sin(g.t*97)*shake*5,Math.cos(g.t*76)*shake*4);
       }
-      // Subtle motion gives each place its own rhythm without hiding combat silhouettes.
-      c.save();c.strokeStyle=zone.palette[2]+'19';c.lineWidth=1.3;
-      if(zone.id==='array'){
-        c.translate(g.w*.57,g.h*.48);c.rotate(state.reduced?0:g.t*.13);
-        for(const r of [160,230,310]){c.beginPath();c.arc(0,0,r,-.09,.09);c.stroke();}
-      }else if(zone.id==='belt'){
-        for(let i=0;i<11;i++){const x=(i*137+(state.reduced?0:g.t*9))%(g.w+60)-30,y=(i*173)%g.h;line(c,x,y,x-9,y+4);}
-      }else{
-        const k=state.reduced?.5:.5+.5*Math.sin(g.t*1.8);
-        c.globalAlpha=.25+k*.6;ring(c,g.w*.5,g.h*.5,64+k*11);
-      }
-      c.restore();
       for(const f of g.fields){
         c.save();c.fillStyle=f.type==='cryo'?'#72d9ff22':'#a2ffe112';circle(c,f.x,f.y,f.radius);c.fill();c.strokeStyle=f.type==='cryo'?'#9eeaffc9':'#aff4d991';c.lineWidth=1.5;c.setLineDash([2,5]);ring(c,f.x,f.y,f.radius);
         if(f.type==='cryo'){c.setLineDash([]);for(let i=0;i<6;i++){const a=i*Math.PI/3;line(c,f.x+Math.cos(a)*5,f.y+Math.sin(a)*5,f.x+Math.cos(a)*14,f.y+Math.sin(a)*14);}}

@@ -27,7 +27,7 @@ const drawing={
   restore(){assert(drawStats.depth>0,'Canvas restore underflow');drawStats.depth--;},
   fill(){drawStats.paint++;},stroke(){drawStats.paint++;}
 };
-for(const k of ['setTransform','fillText','fillRect','moveTo','lineTo','arc','translate','rotate','scale','drawImage','setLineDash','beginPath','closePath']){
+for(const k of ['setTransform','fillText','fillRect','moveTo','lineTo','arc','translate','rotate','scale','drawImage','setLineDash','beginPath','closePath','clip']){
   drawing[k]=(...args)=>{
     for(const a of args)if(typeof a==='number')assert(Number.isFinite(a),'Non-finite Canvas coordinate in '+k);
     if(k==='arc')assert(args[2]>=0,'Negative arc radius');

@@ -1,3 +1,16 @@
+# SWARMWAR v0.1.2.8 — Orbital depth
+
+[Play the space-look build](https://leolunelove.github.io/swarmwar/)
+
+- Three sparse star layers move at different depths, with slow ambient drift.
+- Each chapter gets a shaded planetary horizon and faint nebula lighting: listening orbit, cratered moon, ringed giant, furnace world and eclipsed Core.
+- Distant orbital architecture sits on a foreshortened plane. Ships have subtle shaded hull edges and the core has a restrained engine halo.
+- Stars are hidden behind planets. Reduced Motion removes extra parallax and star drift; paused inspection freezes the scene.
+
+The fullscreen arena, level combat camera, manual aim, hitboxes and balance rules are preserved. Browser checks covered all five backdrops, firing/formation controls, upgrades, pause, defeat and portrait layout. Full automated checks passed. This visual release does not represent another full manual campaign or a physical-device performance benchmark. [Verification history](PLAYTEST.md).
+
+---
+
 # SWARMWAR v0.1.2.7 — Standard campaign field fixes
 
 A fresh public Standard campaign cleared all five chapters, twenty waves and five guardians with manual aim/fire, inspection pauses and **zero checkpoint retries**. The debrief recorded 18:49, 146,193 points, 703 enemies defeated and 150 peak drones. [Playtest evidence and limits](PLAYTEST.md).
@@ -7,7 +20,7 @@ A fresh public Standard campaign cleared all five chapters, twenty waves and fiv
 - Dash/recovery guidance names the actual guardian, including the Crucible.
 - Sector-clear inputs no longer display a false drone requirement, and transient combat notices clear on screen changes.
 
-Enemy damage, hazard timing, charge assembly, weapon damage, upgrade values and protocol multipliers are unchanged. The full campaign was played on v0.1.2.6; v0.1.2.7 received focused regression/browser checks rather than another complete manual run. The v0.1.2.5 tagged ZIP remains unchanged; current source and browser build are v0.1.2.7.
+Enemy damage, hazard timing, charge assembly, weapon damage, upgrade values and protocol multipliers are unchanged. The full campaign was played on v0.1.2.6; v0.1.2.7 received focused regression/browser checks rather than another complete manual run. The v0.1.2.5 tagged ZIP remains unchanged; that field-fix source and browser build was v0.1.2.7.
 
 ---
 
