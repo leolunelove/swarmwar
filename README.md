@@ -1,8 +1,8 @@
-# SWARMWAR v0.1.2.6 — The Signal War
+# SWARMWAR v0.1.2.7 — The Signal War
 
 A fullscreen vector action game about turning one drone into a coordinated swarm. **Every weapon uses manual aim and trigger input.** Move, collect wreckage, reshape the swarm, and choose a build across five chapters.
 
-**Preview clarity patch.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
+**Standard campaign field fixes.** [Play online](https://leolunelove.github.io/swarmwar/) · [Download v0.1.2.5](https://github.com/leolunelove/swarmwar/releases/tag/v0.1.2.5) · [Release notes](RELEASE_NOTES.md)
 
 ![SWARMWAR flight terminal](release-qa-v0.1.2.5/menu.jpg)
 
@@ -75,6 +75,6 @@ Developed using the [AI Prompts for Game Development](https://github.com/Glitch-
 
 ## Build a release
 
-`VERSION` is the release number used by the menu, changelog, HTML metadata and generated `docs/release.json`. Run `python3 tests/check.py --stress`, then `python3 package_release.py`. The latter creates `dist/SWARMWAR-v0.1.2.5.zip` and `dist/SHA256SUMS.txt`; the ZIP includes the game, instructions and release manifest.
+`VERSION` is the release number used by the menu, changelog, HTML metadata and generated `docs/release.json`. Run `python3 tests/check.py --stress`, then `python3 package_release.py`. The latter creates `dist/SWARMWAR-v<version>.zip` and `dist/SHA256SUMS.txt`; the ZIP includes the game, instructions and release manifest.
 
-The game has no external runtime assets or build dependencies. A full manual browser campaign is still unverified: the latest run cleared four chapters and 18/20 waves before control disconnected. Automated campaign success is recorded separately in [PLAYTEST.md](PLAYTEST.md).
+The game has no external runtime assets or build dependencies. A fresh public v0.1.2.6 Standard campaign completed all twenty waves and five guardians in 18:49, with manual aim/fire, inspection pauses and zero checkpoint retries. The debrief recorded 146,193 points, 703 enemies defeated and 150 peak drones. v0.1.2.7 fixes the input and interface problems observed during that run; the entire campaign was not repeated after those fixes. Evidence and validation limits are in [PLAYTEST.md](PLAYTEST.md).

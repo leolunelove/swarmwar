@@ -1,3 +1,15 @@
+# SWARMWAR v0.1.2.7 field-fix build acceptance
+
+- Repository and deployment destination: https://github.com/leolunelove/swarmwar and https://leolunelove.github.io/swarmwar/.
+- Source changes: independent Spear release cooldown; dock passthrough for living enemies; correct chapter guardian guidance; sector-clear command/toast cleanup. No encounter content, damage, charge assembly or upgrade values changed.
+- Tested HTML: 233487 bytes, SHA-256 `4299238530eb9dbbceec614bea8b0a2e6d89ac954c2fac420b535d74f27efa83`. Offline and Pages HTML are byte-identical; `docs/release.json` identifies this build.
+- Required full `python3 tests/check.py` passed, including new regressions and the automated 20-wave/five-guardian campaign. Real-browser final-build quick Ring/Blades-to-Spear release and enemy-target dock passthrough checks passed; no captured warnings/errors.
+- Manual campaign acceptance: the public v0.1.2.6 build cleared all five chapters in 18:49, with manual aim/fire, inspection pauses and zero checkpoint retries. This is separate from automated checks and the focused v0.1.2.7 browser check. Evidence and exact limits: PLAYTEST.md and `release-qa-v0.1.2.7/`.
+- v0.1.2.5 tagged download remains unchanged. This patch updates repository source and the Pages build; it does not replace the historical ZIP.
+- After pushing, verify the Pages workflow SHA and compare live HTML/manifest to the hash above. A local publication receipt records the observed deployment result.
+
+---
+
 # SWARMWAR v0.1.2.5 published release — 25 November 2026
 
 - Repository: https://github.com/leolunelove/swarmwar

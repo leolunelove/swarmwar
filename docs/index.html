@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#071218">
-<meta name="application-version" content="0.1.2.6">
+<meta name="application-version" content="0.1.2.7">
 <title>SWARMWAR</title>
 <style>:root{
   color-scheme:dark;--bg:#071218;--paper:#e8f6f2;--muted:#9db5ba;--faint:#65858a;--edge:#79b7bb38;--cyan:#92f8eb;--gold:#ffd487;--salmon:#ff867f;
@@ -573,7 +573,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   legacyRun:'LEGACY RUN · NO CAMPAIGN RECORD',controlsDesktop:'{move} or arrows move · Mouse aims · Hold left click for Ring/Blades; Spear builds automatically, click/release to fire · {forms} select · {burst} Kamikaze · P pauses/resumes; H inspects while paused. Touch and gamepad controls are in Settings.',controlsTouch:'Drag left to move; drag right to aim and fire. Lift the right finger to release Spear. Tap the formation dock to switch or launch Kamikaze.',controlsPad:'Left stick moves · Right stick aims · RT holds fire; release RT for Spear · Bumpers switch · A launches Kamikaze · Start pauses.',
   inspectField:'VIEW FIELD',inspectHint:'PAUSED · H returns · P resumes',
   title:'SWARMWAR',tagline:'ONE DRONE. MANY FORMS.',
-  menuTag:'SWARM OPERATIONS / FLIGHT TERMINAL',menuCredit:'SECTOR NETWORK / LOCAL CONTROL',menuBuild:'CAMPAIGN EDITION / v0.1.2.6',
+  menuTag:'SWARM OPERATIONS / FLIGHT TERMINAL',menuCredit:'SECTOR NETWORK / LOCAL CONTROL',menuBuild:'CAMPAIGN EDITION / v0.1.2.7',
   quickControls:'{move} MOVE · LEFT CLICK FIRE · {forms} FORMATIONS',
   brief:'A lone signal against a machine empire. Recover the fallen. Build your swarm. Aim every shot.',
   campaignAction:'CAMPAIGN MAP',endlessAction:'ENDLESS RUN',rushAction:'BOSS RUSH',trainingAction:'TRAINING',trainingPassed:'TRAINING ✓',continueRun:'CONTINUE {kind}',savedStatus:'CHECKPOINT / {protocol} · SECTOR {n}',saveExit:'SAVE & EXIT',settings:'SETTINGS',manual:'FIELD MANUAL',records:'FLIGHT RECORDS',
@@ -618,11 +618,11 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   counter:'COUNTER',countering:'COUNTERING',charge:'{n}%',needsDrones:'NEED {n} DRONES',
   tacticalSwitch:'SWITCH TO',tacticalHold:'KEEP ACTIVE',tacticalEvade:'EVADE',
   reasonIncoming:'Incoming fire. Keep moving.',reasonVolley:'Volley charging. Get ready to block.',
-  reasonArmor:'Armored ram. Aim a piercing shot.',reasonBossArmor:'Boss in range. Aim for its core.',reasonBossOpen:'Core exposed. Line up Spear now.',reasonReaverOpen:'Reaver recovering. Close in with Blades.',
+  reasonArmor:'Armored ram. Aim a piercing shot.',reasonBossArmor:'Boss in range. Aim for its core.',reasonBossOpen:'Core exposed. Line up Spear now.',reasonReaverOpen:'{name} recovering. Close in with Blades.',
   reasonSkimmers:'Close pack. Let them enter the blade arc.',
   reasonDebris:'Debris inbound. Leave the marked lane.',reasonSurge:'Surge charging. Move outside the circle.',
   reasonBeam:'Beam locked. Move sideways out of the lane.',
-  reasonDash:'Reaver charging. Move sideways.',
+  reasonDash:'{name} charging. Move sideways.',
   reasonRamCharge:'Ram charging. Sidestep the dashed line.',
   reasonMine:'Mine armed. Back away from the blast.',
   tipMove:'{move} moves. Aim with mouse; hold LEFT CLICK to shoot. Collect lime wreckage.',
@@ -739,6 +739,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 };
 
 const releaseNotes=[
+ {version:'0.1.2.7',date:'25 NOV 2026',title:'Standard campaign field fixes',items:['A quick Spear release now fires its stored rail immediately after Ring or Blades fire, using its own release cooldown.','The mouse formation dock yields to enemies beneath it as well as the player, keeping aimed shots on the battlefield.','Dash and recovery guidance names the current guardian, including the Crucible.','Formation input during sector-clear animations no longer shows a false drone requirement. Combat notices clear when leaving the playfield.','A fresh public Standard campaign cleared all five chapters with manual aim and fire, inspection pauses and zero checkpoint retries. Enemy damage, hazard timing and upgrade values are unchanged.']},
  {version:'0.1.2.6',date:'25 NOV 2026',title:'Clearer combat lanes',items:['Moving-wall corridors have a mint tint, stronger boundaries and direction marks when the opening is outside the camera.','Offscreen beam and broken-ring sources show their release countdown at the arena edge, independently of formation advice.','Encounter announcements fade when a player or enemy sits beneath them. The formation dock fades over the core and lets mouse shots pass through while keyboard shortcuts remain available.','Guardian health now shows its exposed, shielded or enraged state. Frozen inspection leaves the boss meter visible.','Enemy damage, attack timing, weapon values, upgrade values and difficulty rules are unchanged.']},
  {version:'0.1.2.5',date:'25 NOV 2026',title:'First preview release',items:['Five chapters, twenty waves, five guardians and nineteen upgrade choices. Explore the campaign map or practice a chapter.','Spear builds its rail automatically while equipped. Aim and click/release to launch it; charge never fires by itself.','Stored rail charge survives formation changes, pause and pointer cancellation. Quick clicks are registered between frames.','Ring always fires a straight 28-damage center shot, with weaker extra fan bolts. Defeat advice respects locked formations.','A short draft input guard prevents carried combat clicks from selecting modules or aborting.','P toggles pause without leaving fullscreen. View Field retains weapon and threat markers while frozen.','Changing the play area pauses combat and clears held input. Space remains the payload key even if a combat button has focus.','Guardian arrivals show one phase label and clear advice left over from the previous wave.']},
  {version:'2.0',date:'23 NOV 2026',title:'The Signal War',items:[
@@ -832,7 +833,7 @@ const releaseNotes=[
   const fabricationCost=g=>Math.max(1,(g.drones<16?2:g.drones<48?3:4)-Math.min(1,level(g,'foundry')));
   const variant=g=>{const list=sector(g).variants;let n=(g.seed^Math.imul(g.round+1,0x9e3779b9))>>>0;n=Math.imul(n^(n>>>16),0x85ebca6b);n=Math.imul(n^(n>>>13),0xc2b2ae35);return list[((n^(n>>>16))>>>0)%list.length];};
 
-  const freshWeapon=()=>({guard:0,lock:0,spin:0,phase:0,guardFlash:0,railFlash:0,held:false,conductor:false});
+  const freshWeapon=()=>({guard:0,lock:0,spin:0,phase:0,guardFlash:0,railFlash:0,nextRail:0,held:false,conductor:false});
   const chargeDuration=g=>level(g,'siege')?1.02:level(g,'arc')?.78:.62;
   const beatLength=g=>60/sector(g).bpm;
   const beatAt=(g,time,division=1)=>g.sectorStart+Math.ceil((time-g.sectorStart)/(beatLength(g)/division)-1e-8)*(beatLength(g)/division);
@@ -881,7 +882,8 @@ const releaseNotes=[
       // Assembly is automatic; only an intentional trigger release can launch it.
       w.lock=clamp(w.lock+dt/chargeDuration(g),0,1);
       if(released){
-        if(w.lock>=.25&&g.t>=g.nextFire&&fire(g)){w.railFlash=g.t+.18;g.nextFire=g.t+.16;g.stats.railShots++;w.lock=0;}
+        // A deliberately released stored rail must not inherit another weapon's cadence.
+        if(w.lock>=.25&&g.t>=w.nextRail&&fire(g)){w.railFlash=g.t+.18;w.nextRail=g.t+.16;g.stats.railShots++;w.lock=0;}
       }
     }else{
       if(held&&g.t>=g.nextFire&&(g.kind!=='training'||g.training.index!==0)){
@@ -2881,6 +2883,7 @@ const releaseNotes=[
   }
   function show(next,initial=false){
     page=next;inspecting=false;root.dataset.inspect='false';$('inspectBar').hidden=true;root.dataset.page=page;drawDirty=true;pendingBinding=null;keys.clear();firing=false;releasePending=null;clearAimAfterRelease=false;padAimAngle=null;if(g.weapon){g.weapon.held=false;}aim=null;aimPoint=null;moveTouch=null;aimTouch=null;carry=0;lastHud=-1;
+    if(page!=='playing')toast.hidden=true;
     for(const [screen,id] of Object.entries(screens))$(id).hidden=screen!==page;
     $('flight').hidden=page!=='playing';
     if(page==='menu'){menuHud();if(!initial)focus(latestCheckpoint()?'continueRun':'campaign');}
@@ -2967,7 +2970,7 @@ const releaseNotes=[
   $('draftBack').addEventListener('click',event=>{if(!draftClickBlocked(event))show('menu');});
 
   function command(id,steer=aim){
-    if(page!=='playing')return;
+    if(page!=='playing'||g.bossDefeated)return;
     if(id==='burst'){
       if(steer&&Math.hypot(steer.x-g.player.x,steer.y-g.player.y)>4)g.player.angle=Math.atan2(steer.y-g.player.y,steer.x-g.player.x);
       Swarm.burst(g);
@@ -3085,7 +3088,7 @@ const releaseNotes=[
     write('tacticalLabel',t('tactical'+cap(state)));
     $('tacticalOrder').hidden=!mode;
     if(mode)write('tacticalOrder',keyLabel(mode,true)+' / '+t(mode+'Name'));
-    write('tacticalReason',t('reason'+cap(guide.reason)));
+    write('tacticalReason',t('reason'+cap(guide.reason),{name:guide.target?.boss?t(Swarm.sector(g).bossTitle||guide.target.type):''}));
   }
   function announcementHud(){
     const banner=$('announcement'),hint=$('hint');
@@ -3115,8 +3118,9 @@ const releaseNotes=[
   }
   function hud(){
     const p=g.player,boss=g.enemies.find(e=>e.boss),view=FlightRender.camera(g);root.dataset.hud=(p.x-view.x)/view.w<.4&&(p.y-view.y)/view.h<.17?'clear':'normal';root.dataset.utility=(p.x-view.x)/view.w>.8&&(p.y-view.y)/view.h<.17?'clear':'normal';
-    const screen=o=>({x:(o.x-view.x)/view.w,y:(o.y-view.y)/view.h}),core=screen(p);
-    root.dataset.dock=core.x>.25&&core.x<.75&&core.y>.83?'clear':'normal';
+    const screen=o=>({x:(o.x-view.x)/view.w,y:(o.y-view.y)/view.h});
+    const underDock=o=>{const s=screen(o);return s.x>.25&&s.x<.75&&s.y>.83;};
+    root.dataset.dock=underDock(p)||g.enemies.some(e=>e.hp>0&&underDock(e))?'clear':'normal';
     const underBanner=o=>{const s=screen(o);return s.x>.28&&s.x<.72&&s.y>.07&&s.y<.25;};
     root.dataset.announcement=underBanner(p)||g.enemies.some(e=>e.hp>0&&underBanner(e))?'clear':'normal';
     write('clock',clock(g.t));write('operation',t(g.kind)+(g.kind==='training'?'':' / '+pad(g.round+1,2)));

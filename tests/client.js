@@ -198,3 +198,31 @@ drawStats.text=[];const clarityTime=game.t;frames(1);
 assert(drawStats.text.some(text=>String(text).startsWith('BEAM 0.8s'))&&game.t===clarityTime,'An offscreen beam shows its actual release countdown during frozen inspection');
 drawStats.text=null;
 report('Combat clarity regressions passed: dock and banner occlusion, offscreen beam deadline.');
+
+game.enemies=[];game.hazards=[];game.hostile=[];game.player.x=game.w*.5;game.player.y=game.h*.5;
+const targetView=FlightRender.camera(game);
+const dockTarget=Swarm.spawn(game,'ram',targetView.x+targetView.w*.5,targetView.y+targetView.h*.94);
+key('h');key('h');
+assert(dom.game.dataset.dock==='clear','The dock also yields to enemy targets so aiming behind it cannot switch formations');
+dockTarget.hp=0;key('h');key('h');
+assert(dom.game.dataset.dock==='normal','Defeated targets do not disable the formation controls');
+
+key('p');game.bossDefeated=true;game.mode='ring';
+const utilityToast=dom.game.children.find(el=>el.className==='utility-message');
+key('3');assert(utilityToast.hidden,'Secured-sector formation inputs cannot show a false drone requirement');
+game.bossDefeated=false;game.unlocked=1;key('3');
+assert(!utilityToast.hidden&&utilityToast.textContent==='17 DRONES','A genuinely locked formation still explains its requirement');
+key('p');assert(utilityToast.hidden,'Combat requirement messages clear when leaving the playfield');
+
+game.unlocked=3;game.nextSpawn=Infinity;game.bossSpawned=true;game.wave=4;game.enemies=[];
+for(const [chapter,name] of [[1,'BELT REAVER'],[3,'THE CRUCIBLE']]){
+  game.round=chapter;game.enemies=[];
+  const guardian=Swarm.spawn(game,'reaver',game.player.x+110,game.player.y);
+  guardian.dummy=true;guardian.attack='dash';guardian.wind=game.t+2;guardian.windAngle=Math.PI;
+  key('p');frames(1);
+  assert(dom.tacticalReason.textContent===name+' charging. Move sideways.','Dash guidance uses the actual chapter guardian name');
+  guardian.wind=0;guardian.exposeAt=game.t;guardian.recoverUntil=game.t+2;frames(15);
+  assert(dom.tacticalReason.textContent===name+' recovering. Close in with Blades.','Recovery guidance also uses the actual chapter guardian name');
+  key('p');
+}
+report('Live-playtest regressions passed: enemy aim passthrough, accurate guardian name and cleared lock notices.');

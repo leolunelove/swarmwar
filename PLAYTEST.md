@@ -1,3 +1,34 @@
+# Public Standard campaign clear and v0.1.2.7 field fixes
+
+A **fresh public v0.1.2.6 Standard campaign**, started from chapter one, completed all **twenty waves and five guardians with zero checkpoint retries**. Browser inputs manually controlled movement, aim, held Ring/Blades fire, stored rail release, payloads, upgrades and route deployment. Frequent P/H inspection pauses were used. There were no reloads, checkpoint continuations, injected runtime state or automated combat controller in this successful run. This is a pause-assisted manual clear, not a continuous reflex benchmark or a claim about typical win rates.
+
+| Chapter | Guardian defeated | Next chapter deployed |
+| --- | --- | --- |
+| The Array | 03:07 | 03:08 |
+| Debris Belt | 06:45 | 06:46 |
+| The Veil | 10:16 | 10:17 |
+| Cinder Forge | 14:11 | 14:12 |
+| Black Core | 18:47 | Victory debrief 18:49 |
+
+Debrief: **146,193 points, rank C, 18:49, five sectors, 150 peak drones, 703 enemies defeated, 678 formation switches, 276 blocked shots, best chain 21, 52 counter salvos, 61 interrupts, zero checkpoint retries**. Sovereign fell at 38/144 hull with 122 drones. [Victory screenshot](release-qa-v0.1.2.7/standard-campaign-clear.jpg) and [rendered debrief text](release-qa-v0.1.2.7/standard-campaign-clear.txt) are checked in; the complete local capture sequence remains in `live-standard-v0.1.2.6-2026-11-25/`.
+
+Final build: Drone Foundry; Core Plating 2; Nanite Mesh 2; Auxiliary Guns 2; Bastion; Hot Charge; Phase Conductor; Echo Shield; Salvage Magnet; Cluster Rack; Mirror Kernel; Battle Recycler; Afterburn; Rotor Edge; Long Orbit; Long Lance. This strong sustain build recovered from 12 hull after the Warden and survived the late campaign. One build with inspection pauses cannot establish whether every build is equally viable.
+
+All chapter handoffs held the action until deployment, retained the build and applied reserve healing/drones. All four wave-to-draft transitions and the fifth guardian phase were exercised in every chapter. Ring capture/release, aimed piercing rails, held blade cuts, cluster payloads, ordinary projectile defense, mines, charge tells, broken-ring gaps, heat openings, both wall orientations and the Sovereign's enraged three-beam fan were exercised. The fan had usable gaps; several hits followed late switching, remaining in a locked lane, or moving into escort contact. No unavoidable attack combination was confirmed, so enemy damage, hazard timing, upgrade values and difficulty multipliers were left unchanged. The arena filled 1280×720; native fullscreen was not re-entered in this campaign.
+
+Confirmed fixes in **v0.1.2.7**:
+
+- A stored rail could be silently discarded by Ring/Blades' shared firing deadline after a fast formation switch. A regression failed before the fix. Spear now owns its 0.16-second release cooldown; charge assembly and damage are unchanged. The campaign used a short wait after switching as a workaround, since its live build was not reloaded mid-run.
+- Enemies behind the bottom formation buttons could intercept an aimed shot as an unwanted formation click. The fine-pointer dock now fades and passes shots through when a living enemy is beneath it, in addition to yielding to the core. Keyboard switching stays available; touch controls retain their buttons.
+- Crucible dash/recovery instructions used the underlying Reaver engine name. Guidance now uses the current chapter guardian's actual title.
+- Formation input during the secured-sector animation could show a false locked-formation requirement, including a misleading `17 DRONES` toast over the guardian draft. Commands now ignore that transition, and combat notices clear on leaving the playfield. This was a requirement notice, not a stale live drone counter.
+
+`python3 tests/check.py` passed after the final changes: three seeded simulation campaigns, combat/progression contracts, packaged controls, new release/dock/name/toast regressions, the automated twenty-wave/five-guardian client campaign (1042 simulated seconds, nineteen upgrades), and Boss Rush (94 seconds). Offline and Pages HTML match their manifest.
+
+Focused real-browser v0.1.2.7 verification passed: title/changelog version, Black Core practice, manual fire and movement, P/H pause inspection, immediate Ring-to-Spear and Blades-to-Spear 80 ms click/release without the campaign workaround. Both displayed a visible rail and spent charge (13% and 21% remaining after assembly resumed). A living Bulwark beneath the dock while the player remained above it produced `data-dock=clear`, computed opacity `0.12`, and `elementFromPoint(500,680).id=canvas`. No captured console errors or warnings. Screenshots and a text record are in `release-qa-v0.1.2.7/`. The entire manual campaign was not repeated on v0.1.2.7. Physical touch/gamepad, audible audio quality and broad performance remain outside this pass. The earlier v0.1.2.5 timeout defeat remains recorded separately below.
+
+---
+
 # Live Standard v0.1.2.5 attempt — 25 November 2026
 
 A fresh manual Standard campaign on the public Pages build cleared The Array (03:24) and Debris Belt (about 07:03), then The Veil waves 1–3. Browser control timed out after resuming Memory Lock at 09:24; the next successful observation was the defeat debrief at 09:35. Result: two sectors, 429 enemies, peak 65 drones, 324 switches, 150 blocks, 17 interrupts and **zero checkpoint retries**. This was not a campaign clear.
@@ -6,7 +37,7 @@ Normal CUA pointer/keyboard inputs controlled manual aim, held Ring/Blades fire,
 
 Confirmed clarity problems: bottom-center core and targets can be covered by formation controls; encounter copy covers upper-center targets; offscreen wall openings are easy to mistake for the blocked side; offscreen beam/ring origins lack a readable release deadline; frozen inspection covers the boss meter. These are presentation findings, not proof that hazard timing or damage is unfair. The run also included avoidable contact and projectile hits while firing or switching late.
 
-The v0.1.2.6 patch adds wall-corridor tint/boundaries and offscreen direction marks, edge countdowns, context-sensitive HUD fading, visible boss state and a lower frozen-inspection bar. Combat simulation and content are unchanged. Full automated checks passed, including the 20-wave/five-boss packaged campaign and new clarity regressions. A fresh full manual campaign after the fixes remains pending.
+The v0.1.2.6 patch adds wall-corridor tint/boundaries and offscreen direction marks, edge countdowns, context-sensitive HUD fading, visible boss state and a lower frozen-inspection bar. Combat simulation and content are unchanged. Full automated checks passed, including the 20-wave/five-boss packaged campaign and new clarity regressions. The following fresh v0.1.2.6 manual campaign completed all five chapters; see the record above.
 
 ---
 

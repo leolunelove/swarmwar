@@ -223,6 +223,16 @@ check(Content.sectors.every(s=>s.bpm>=100&&s.bpm<=130),'All sectors define a sha
 report('Combat rules passed: manual capture release, no automatic aiming or firing, real blade arcs, eight core alternatives, enemy shields, interruptible tells, safe geometry gaps, and boss escort budgets.');
 
 {
+  const g=combatRoom(),p=g.player,aim={x:p.x+240,y:p.y};g.nextFire=0;g.weapon.lock=1;
+  Swarm.step(g,{aim,fire:true});
+  check(g.nextFire>g.t,'Ring has a live firing cooldown before the formation switch');
+  Swarm.setMode(g,'spear');Swarm.step(g,{aim,fire:true});Swarm.step(g,{aim,release:true});
+  check(g.stats.railShots===1&&g.weapon.lock===0,'A stored rail releases immediately after Ring fire instead of being discarded by its cooldown');
+  const rails=g.stats.railShots;Swarm.step(g,{aim,release:true});
+  check(g.stats.railShots===rails,'Repeated release input cannot fire an unassembled rail');
+}
+
+{
   const g=combatRoom('spear'),p=g.player;g.nextFire=0;
   advance(g,.8,{aim:null,fire:false});check(g.weapon.lock===1&&g.stats.railShots===0,'Rail assembles automatically without aim or held trigger and never self-fires');
   Swarm.setMode(g,'ring');advance(g,.5,{aim:null,fire:false});check(g.weapon.lock===1,'Changing formation stores a ready rail');Swarm.setMode(g,'spear');

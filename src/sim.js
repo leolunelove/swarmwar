@@ -10,7 +10,7 @@ const Swarm=(()=>{
   const fabricationCost=g=>Math.max(1,(g.drones<16?2:g.drones<48?3:4)-Math.min(1,level(g,'foundry')));
   const variant=g=>{const list=sector(g).variants;let n=(g.seed^Math.imul(g.round+1,0x9e3779b9))>>>0;n=Math.imul(n^(n>>>16),0x85ebca6b);n=Math.imul(n^(n>>>13),0xc2b2ae35);return list[((n^(n>>>16))>>>0)%list.length];};
 
-  const freshWeapon=()=>({guard:0,lock:0,spin:0,phase:0,guardFlash:0,railFlash:0,held:false,conductor:false});
+  const freshWeapon=()=>({guard:0,lock:0,spin:0,phase:0,guardFlash:0,railFlash:0,nextRail:0,held:false,conductor:false});
   const chargeDuration=g=>level(g,'siege')?1.02:level(g,'arc')?.78:.62;
   const beatLength=g=>60/sector(g).bpm;
   const beatAt=(g,time,division=1)=>g.sectorStart+Math.ceil((time-g.sectorStart)/(beatLength(g)/division)-1e-8)*(beatLength(g)/division);
@@ -59,7 +59,8 @@ const Swarm=(()=>{
       // Assembly is automatic; only an intentional trigger release can launch it.
       w.lock=clamp(w.lock+dt/chargeDuration(g),0,1);
       if(released){
-        if(w.lock>=.25&&g.t>=g.nextFire&&fire(g)){w.railFlash=g.t+.18;g.nextFire=g.t+.16;g.stats.railShots++;w.lock=0;}
+        // A deliberately released stored rail must not inherit another weapon's cadence.
+        if(w.lock>=.25&&g.t>=w.nextRail&&fire(g)){w.railFlash=g.t+.18;w.nextRail=g.t+.16;g.stats.railShots++;w.lock=0;}
       }
     }else{
       if(held&&g.t>=g.nextFire&&(g.kind!=='training'||g.training.index!==0)){

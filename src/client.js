@@ -357,6 +357,7 @@
   }
   function show(next,initial=false){
     page=next;inspecting=false;root.dataset.inspect='false';$('inspectBar').hidden=true;root.dataset.page=page;drawDirty=true;pendingBinding=null;keys.clear();firing=false;releasePending=null;clearAimAfterRelease=false;padAimAngle=null;if(g.weapon){g.weapon.held=false;}aim=null;aimPoint=null;moveTouch=null;aimTouch=null;carry=0;lastHud=-1;
+    if(page!=='playing')toast.hidden=true;
     for(const [screen,id] of Object.entries(screens))$(id).hidden=screen!==page;
     $('flight').hidden=page!=='playing';
     if(page==='menu'){menuHud();if(!initial)focus(latestCheckpoint()?'continueRun':'campaign');}
@@ -443,7 +444,7 @@
   $('draftBack').addEventListener('click',event=>{if(!draftClickBlocked(event))show('menu');});
 
   function command(id,steer=aim){
-    if(page!=='playing')return;
+    if(page!=='playing'||g.bossDefeated)return;
     if(id==='burst'){
       if(steer&&Math.hypot(steer.x-g.player.x,steer.y-g.player.y)>4)g.player.angle=Math.atan2(steer.y-g.player.y,steer.x-g.player.x);
       Swarm.burst(g);
@@ -561,7 +562,7 @@
     write('tacticalLabel',t('tactical'+cap(state)));
     $('tacticalOrder').hidden=!mode;
     if(mode)write('tacticalOrder',keyLabel(mode,true)+' / '+t(mode+'Name'));
-    write('tacticalReason',t('reason'+cap(guide.reason)));
+    write('tacticalReason',t('reason'+cap(guide.reason),{name:guide.target?.boss?t(Swarm.sector(g).bossTitle||guide.target.type):''}));
   }
   function announcementHud(){
     const banner=$('announcement'),hint=$('hint');
@@ -591,8 +592,9 @@
   }
   function hud(){
     const p=g.player,boss=g.enemies.find(e=>e.boss),view=FlightRender.camera(g);root.dataset.hud=(p.x-view.x)/view.w<.4&&(p.y-view.y)/view.h<.17?'clear':'normal';root.dataset.utility=(p.x-view.x)/view.w>.8&&(p.y-view.y)/view.h<.17?'clear':'normal';
-    const screen=o=>({x:(o.x-view.x)/view.w,y:(o.y-view.y)/view.h}),core=screen(p);
-    root.dataset.dock=core.x>.25&&core.x<.75&&core.y>.83?'clear':'normal';
+    const screen=o=>({x:(o.x-view.x)/view.w,y:(o.y-view.y)/view.h});
+    const underDock=o=>{const s=screen(o);return s.x>.25&&s.x<.75&&s.y>.83;};
+    root.dataset.dock=underDock(p)||g.enemies.some(e=>e.hp>0&&underDock(e))?'clear':'normal';
     const underBanner=o=>{const s=screen(o);return s.x>.28&&s.x<.72&&s.y>.07&&s.y<.25;};
     root.dataset.announcement=underBanner(p)||g.enemies.some(e=>e.hp>0&&underBanner(e))?'clear':'normal';
     write('clock',clock(g.t));write('operation',t(g.kind)+(g.kind==='training'?'':' / '+pad(g.round+1,2)));

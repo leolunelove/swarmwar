@@ -75,11 +75,11 @@ const copy={
   counter:'COUNTER',countering:'COUNTERING',charge:'{n}%',needsDrones:'NEED {n} DRONES',
   tacticalSwitch:'SWITCH TO',tacticalHold:'KEEP ACTIVE',tacticalEvade:'EVADE',
   reasonIncoming:'Incoming fire. Keep moving.',reasonVolley:'Volley charging. Get ready to block.',
-  reasonArmor:'Armored ram. Aim a piercing shot.',reasonBossArmor:'Boss in range. Aim for its core.',reasonBossOpen:'Core exposed. Line up Spear now.',reasonReaverOpen:'Reaver recovering. Close in with Blades.',
+  reasonArmor:'Armored ram. Aim a piercing shot.',reasonBossArmor:'Boss in range. Aim for its core.',reasonBossOpen:'Core exposed. Line up Spear now.',reasonReaverOpen:'{name} recovering. Close in with Blades.',
   reasonSkimmers:'Close pack. Let them enter the blade arc.',
   reasonDebris:'Debris inbound. Leave the marked lane.',reasonSurge:'Surge charging. Move outside the circle.',
   reasonBeam:'Beam locked. Move sideways out of the lane.',
-  reasonDash:'Reaver charging. Move sideways.',
+  reasonDash:'{name} charging. Move sideways.',
   reasonRamCharge:'Ram charging. Sidestep the dashed line.',
   reasonMine:'Mine armed. Back away from the blast.',
   tipMove:'{move} moves. Aim with mouse; hold LEFT CLICK to shoot. Collect lime wreckage.',
@@ -196,7 +196,8 @@ const copy={
 };
 
 const releaseNotes=[
- {version:'__SWARMWAR_VERSION__',date:'25 NOV 2026',title:'Clearer combat lanes',items:['Moving-wall corridors have a mint tint, stronger boundaries and direction marks when the opening is outside the camera.','Offscreen beam and broken-ring sources show their release countdown at the arena edge, independently of formation advice.','Encounter announcements fade when a player or enemy sits beneath them. The formation dock fades over the core and lets mouse shots pass through while keyboard shortcuts remain available.','Guardian health now shows its exposed, shielded or enraged state. Frozen inspection leaves the boss meter visible.','Enemy damage, attack timing, weapon values, upgrade values and difficulty rules are unchanged.']},
+ {version:'__SWARMWAR_VERSION__',date:'25 NOV 2026',title:'Standard campaign field fixes',items:['A quick Spear release now fires its stored rail immediately after Ring or Blades fire, using its own release cooldown.','The mouse formation dock yields to enemies beneath it as well as the player, keeping aimed shots on the battlefield.','Dash and recovery guidance names the current guardian, including the Crucible.','Formation input during sector-clear animations no longer shows a false drone requirement. Combat notices clear when leaving the playfield.','A fresh public Standard campaign cleared all five chapters with manual aim and fire, inspection pauses and zero checkpoint retries. Enemy damage, hazard timing and upgrade values are unchanged.']},
+ {version:'0.1.2.6',date:'25 NOV 2026',title:'Clearer combat lanes',items:['Moving-wall corridors have a mint tint, stronger boundaries and direction marks when the opening is outside the camera.','Offscreen beam and broken-ring sources show their release countdown at the arena edge, independently of formation advice.','Encounter announcements fade when a player or enemy sits beneath them. The formation dock fades over the core and lets mouse shots pass through while keyboard shortcuts remain available.','Guardian health now shows its exposed, shielded or enraged state. Frozen inspection leaves the boss meter visible.','Enemy damage, attack timing, weapon values, upgrade values and difficulty rules are unchanged.']},
  {version:'0.1.2.5',date:'25 NOV 2026',title:'First preview release',items:['Five chapters, twenty waves, five guardians and nineteen upgrade choices. Explore the campaign map or practice a chapter.','Spear builds its rail automatically while equipped. Aim and click/release to launch it; charge never fires by itself.','Stored rail charge survives formation changes, pause and pointer cancellation. Quick clicks are registered between frames.','Ring always fires a straight 28-damage center shot, with weaker extra fan bolts. Defeat advice respects locked formations.','A short draft input guard prevents carried combat clicks from selecting modules or aborting.','P toggles pause without leaving fullscreen. View Field retains weapon and threat markers while frozen.','Changing the play area pauses combat and clears held input. Space remains the payload key even if a combat button has focus.','Guardian arrivals show one phase label and clear advice left over from the previous wave.']},
  {version:'2.0',date:'23 NOV 2026',title:'The Signal War',items:[
  'Five playable chapters, each with four waves and a guardian. The Veil adds corridor signals; Cinder Forge adds paired heat vents.',

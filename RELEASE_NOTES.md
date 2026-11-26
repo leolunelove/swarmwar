@@ -1,10 +1,23 @@
+# SWARMWAR v0.1.2.7 — Standard campaign field fixes
+
+A fresh public Standard campaign cleared all five chapters, twenty waves and five guardians with manual aim/fire, inspection pauses and **zero checkpoint retries**. The debrief recorded 18:49, 146,193 points, 703 enemies defeated and 150 peak drones. [Playtest evidence and limits](PLAYTEST.md).
+
+- Quick Spear releases work immediately after Ring or Blades fire, using a separate rail release cooldown.
+- The mouse formation dock yields to living enemy targets beneath it so aimed shots reach the arena. Keyboard controls remain available; touch buttons keep their behavior.
+- Dash/recovery guidance names the actual guardian, including the Crucible.
+- Sector-clear inputs no longer display a false drone requirement, and transient combat notices clear on screen changes.
+
+Enemy damage, hazard timing, charge assembly, weapon damage, upgrade values and protocol multipliers are unchanged. The full campaign was played on v0.1.2.6; v0.1.2.7 received focused regression/browser checks rather than another complete manual run. The v0.1.2.5 tagged ZIP remains unchanged; current source and browser build are v0.1.2.7.
+
+---
+
 # SWARMWAR v0.1.2.6 — Clearer combat lanes
 
 The live game gains stronger wall-corridor markings, offscreen beam/ring countdowns, announcements that fade over targets, a dock that yields to the core and mouse shots, and weapon feedback that stays inside the viewport. Boss state and health remain readable during frozen inspection. Combat simulation, encounter content and upgrade values are unchanged.
 
-Full automated checks passed, including the packaged twenty-wave/five-guardian campaign and presentation regressions. A real-browser preview verified corridor tint, manual firing/switching, pause, bottom-edge labels and dock pointer passthrough, with no captured console errors. The current full manual Standard attempt is still pending; the previous v0.1.2.5 attempt ended after a browser-control timeout in chapter three. See PLAYTEST.md for exact evidence and limits.
+Full automated checks passed, including the packaged twenty-wave/five-guardian campaign and presentation regressions. A real-browser preview verified corridor tint, manual firing/switching, pause, bottom-edge labels and dock pointer passthrough, with no captured console errors. A subsequent fresh v0.1.2.6 Standard attempt completed all five chapters; the previous v0.1.2.5 attempt ended after a browser-control timeout in chapter three. See PLAYTEST.md for exact evidence and limits.
 
-The original v0.1.2.5 tagged download below remains unchanged. The repository and live Pages build carry v0.1.2.6.
+The original v0.1.2.5 tagged download below remains unchanged. This was the v0.1.2.6 Pages patch; the latest build is described above.
 
 ---
 

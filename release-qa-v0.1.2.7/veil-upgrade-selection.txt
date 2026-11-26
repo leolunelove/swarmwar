@@ -1,0 +1,25 @@
+SOUND ON
+FULLSCREEN
+THE VEIL SECURED / REQUISITION AVAILABLE
+Build your swarm
+
+Next: CINDER FORGE. Recover 32 hull and launch 5 reserve drones. Select a module to depart.
+
+INSTALLED / Drone Foundry · Core Plating 2 · Nanite Mesh 2 · Auxiliary Guns 2 · Bastion · Hot Charge · Phase Conductor · Echo Shield
+
+RING MODULE · CHOOSE ONE CORE
+Mirror Kernel
+Stored captures add 12 damage to your next aimed Ring shot.
+Fire 35% slower. Locks the Ring core slot.
+SELECT
+SWARM MODULE · LEVEL 1
+Salvage Magnet
+Draw wreckage in from farther away.
+SELECT
+KAMIKAZE MODULE · CHOOSE ONE CORE
+Cryo Payload
+Blasts leave a 2.4-second field that slows enemies and bullets.
+Blast damage falls 35%. Locks the payload slot.
+SELECT
+REROUTE MODULES (1) ABORT RUN
+17 DRONES

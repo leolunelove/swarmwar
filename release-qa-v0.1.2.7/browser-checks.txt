@@ -1,0 +1,4 @@
+v0.1.2.7 browser preview
+Menu and changelog show 0.1.2.7. Black Core practice, manual mouse fire, movement and P/H inspection exercised.
+Stored rail: Ring 80ms shot, immediate 2 switch, immediate 80ms click/release: visible rail and charge 13%. Blades 80ms shot, immediate 2 switch and 80ms release: visible rail and charge 21%. No 160ms switch workaround.
+Living Bulwark below the player while the core remained above the dock: data-dock=clear, computed dock opacity=0.12, elementFromPoint(500,680).id=canvas.

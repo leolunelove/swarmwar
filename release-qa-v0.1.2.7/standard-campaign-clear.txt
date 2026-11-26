@@ -1,0 +1,38 @@
+SOUND ON
+FULLSCREEN
+CAMPAIGN COMPLETE / STANDARD
+ARRAY LIBERATED
+
+Five chapters secured. The swarm carries a new signal.
+
+NEW BEST
+146,193
+FLIGHT TIME
+18:49
+SECTORS
+5
+PEAK DRONES
+150
+ENEMIES DOWN
+703
+SWITCHES
+678
+SHOTS BLOCKED
+276
+BEST CHAIN
+21
+COUNTER SALVOS
+52
+INTERRUPTS
+61
+RANK
+C
+CHECKPOINT RETRIES
+0
+
+ARMAMENT / Drone Foundry · Core Plating 2 · Nanite Mesh 2 · Auxiliary Guns 2 · Bastion · Hot Charge · Phase Conductor · Echo Shield · Salvage Magnet · Cluster Rack · Mirror Kernel · Battle Recycler · Afterburn · Rotor Edge · Long Orbit · Long Lance
+
+BADGE EARNED / Array Liberator
+
+REDEPLOY
+MAIN MENU
